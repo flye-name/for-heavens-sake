@@ -162,7 +162,7 @@ public class Player
 	
 	public void Draw()
 	{
-		var texture = Assets.Placeholder;
+		var texture = Assets.Textures.Placeholder;
 		
 		
 		FHS.SpriteBatch.Draw(texture, new Vector2(600, 800) - FHS.ScreenPosition, null, new Color(116, 131, 250), 0, texture.Size / 2f, 2f, SpriteEffects.None, 0);

@@ -25,7 +25,7 @@ public partial class FHS
 		SpriteBatch.Begin();
 		SpriteBatch.Draw(MainRender, new Vector2(2, 0), Color.Red with { A = 0});
 		SpriteBatch.Draw(MainRender, new Vector2(-2, 0), Color.Blue with { A = 0});
-		SpriteBatch.Draw(MainRender, Vector2.Zero, Color.White with { A = 0});
+		SpriteBatch.Draw(MainRender, Vector2.Zero, Color.White with { A = 0 });
 		SpriteBatch.End();
 		
 		base.Draw(gameTime);
@@ -45,7 +45,7 @@ public partial class FHS
 			Player.Draw();
 		}
 		
-		SpriteBatch.Draw(Assets.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
+		SpriteBatch.Draw(Assets.Textures.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 		
 		SpriteBatch.End();
 	}

@@ -4,6 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForHeavensSake;
 
+public enum TileType : byte
+{
+	Inactive,
+	Normal,
+	SpikeSides,
+	
+}
+
 public static class Tiles
 {
 	public const int MaxTilesX = 30;
@@ -41,7 +49,7 @@ public static class Tiles
 			{
 				if (Grid[i, j] > 0)
 				{
-					FHS.SpriteBatch.Draw(Assets.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+					FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 				}
 			}
 		}
