@@ -20,6 +20,7 @@ public class Player
 	public bool CollidingWithTileHead;
 	public bool CollidingWithTileFloor;
 	public int JumpLeewayTime;
+	public int JumpDelay;
 	public const float Speed = 5f;
 
 	public bool Grounded() => (CollidingWithTileFloor || Position.Y > FHS.GroundLevel * FHS.TileSize) && Velocity.Y > 0;
@@ -27,8 +28,11 @@ public class Player
 	public void HandleInput()
 	{
 		var jump = Input.KeyboardCurrent.IsKeyDown(Keys.W) || Input.KeyboardCurrent.IsKeyDown(Keys.Up) || Input.KeyboardCurrent.IsKeyDown(Keys.Space);
-		if (jump && (Grounded() || JumpLeewayTime > 0))
+		if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
 		{
+			JumpDelay = 10;
+			Assets.Sounds.Jump.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+			
 			JumpLeewayTime = 0;
 			Velocity.Y = -Speed;
 		}
@@ -57,6 +61,11 @@ public class Player
 	public void Update()
 	{
 		JumpLeewayTime--;
+		JumpDelay--;
+
+		if (Velocity.Y < 0 && JumpDelay < 3)
+			JumpDelay = 3;
+		
 		UpdateCollision();
 		
 		HandleInput();
@@ -113,7 +122,7 @@ public class Player
 					dir.Normalize();
 					if (shouldMoveX)
 						Position.X -= dir.X;
-					if (shouldMoveY)
+					if (shouldMoveY && (Velocity.Y == 0 || MathF.Sign(dir.Y) == MathF.Sign(Velocity.Y)))
 						Position.Y -= dir.Y;
 				}
 			}
@@ -144,6 +153,9 @@ public class Player
 		}
 
 		Position += movement;
+
+		if (Grounded() && MathF.Abs(movement.X) > 0 && FHS.AmbientTimer % 20 == 0)
+			Assets.Sounds.Step.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 		
 		Velocity.X = 0;
 		Velocity.Y = MathHelper.Lerp(Velocity.Y, Speed * 1.5f, 0.005f);

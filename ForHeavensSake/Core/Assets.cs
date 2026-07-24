@@ -46,7 +46,7 @@ public static class Assets
 			TestSound = LoadSound("TestSound");
 			Step = LoadSound("Step");
 			MenuSelect = LoadSound("MenuSelect");
-			Blip = LoadSound("Blip");
+			Blip = LoadSound("MenuBlip");
 			Jump = LoadSound("Jump");
 			Fall = LoadSound("Fall");
 			Hurt = LoadSound("Hurt");

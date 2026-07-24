@@ -26,7 +26,10 @@ public static class Tiles
 
 		if (x < 0 || y < 0 || x > MaxTilesX || y > MaxTilesY)
 			return;
-
+		
+		if (Grid[x, y] != type)
+			Assets.Sounds.TilePlace.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+		
 		Grid[x, y] = type;
 	}
 
@@ -38,6 +41,9 @@ public static class Tiles
 		if (x < 0 || y < 0 || x > MaxTilesX || y > MaxTilesY)
 			return;
 
+		if (Grid[x, y] > 0)
+			Assets.Sounds.TileBreak.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+		
 		Grid[x, y] = 0;
 	}
 

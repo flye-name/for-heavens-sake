@@ -12,9 +12,12 @@ public partial class FHS
 	public static Player Player = new();
 	public const int GroundLevel = 40;
 	public const int TileSize = 64;
+	public static int AmbientTimer;
 	
 	protected override void Update(GameTime gameTime)
 	{
+		AmbientTimer++;
+		
 		Input.UpdateCurrent();
 
 		if (!InGame)
