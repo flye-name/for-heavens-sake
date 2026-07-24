@@ -23,7 +23,9 @@ public partial class FHS
 		GraphicsDevice.SetRenderTarget(null);
 		GraphicsDevice.Clear(Color.Transparent);
 		SpriteBatch.Begin();
-		SpriteBatch.Draw(MainRender, Vector2.Zero, Color.White);
+		SpriteBatch.Draw(MainRender, new Vector2(2, 0), Color.Red with { A = 0});
+		SpriteBatch.Draw(MainRender, new Vector2(-2, 0), Color.Blue with { A = 0});
+		SpriteBatch.Draw(MainRender, Vector2.Zero, Color.White with { A = 0});
 		SpriteBatch.End();
 		
 		base.Draw(gameTime);
@@ -39,11 +41,11 @@ public partial class FHS
 		}
 		else
 		{
+			Tiles.Draw();
 			Player.Draw();
 		}
 		
-		var pos = Input.MousePosition / TileSize;
-		SpriteBatch.Draw(Assets.Placeholder, new Vector2((int)pos.X, (int)pos.Y) * TileSize, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+		SpriteBatch.Draw(Assets.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 		
 		SpriteBatch.End();
 	}
