@@ -42,6 +42,9 @@ public partial class FHS
 			Player.Draw();
 		}
 		
+		var pos = Input.MousePosition / TileSize;
+		SpriteBatch.Draw(Assets.Placeholder, new Vector2((int)pos.X, (int)pos.Y) * TileSize, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+		
 		SpriteBatch.End();
 	}
 }

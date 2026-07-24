@@ -65,7 +65,7 @@ public class Player
 		var nextHitbox = Bounds;
 		nextHitbox.Offset((int)Velocity.X, (int)Velocity.Y);
 		
-		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > 400;
+		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > FHS.TileSize * 8.5f + 4;
 		
 		Position += new Vector2(outerEdges ? 0 : Velocity.X, MathHelper.Clamp(Velocity.Y, float.MinValue, Grounded() ? 0 : float.MaxValue));
 		

@@ -11,7 +11,7 @@ public partial class FHS
 	public static bool InGame;
 	public static Player Player = new();
 	public const int GroundLevel = 40;
-	public const int TileSize = 32;
+	public const int TileSize = 64;
 	
 	protected override void Update(GameTime gameTime)
 	{
