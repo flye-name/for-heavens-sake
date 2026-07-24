@@ -11,7 +11,7 @@ public partial class FHS
 	protected override void LoadContent()
 	{
 		SpriteBatch = new SpriteBatch(GraphicsDevice);
-		FontSystem = new();
+		MainRender = new RenderTarget2D(GraphicsDevice, (int)ScreenSize.X, (int)ScreenSize.Y);
 		
 		Assets.Load();
 		
@@ -21,6 +21,7 @@ public partial class FHS
 	protected override void UnloadContent()
 	{
 		SpriteBatch.Dispose();
+		MainRender.Dispose();
 		Assets.Unload();
 		
 		base.UnloadContent();

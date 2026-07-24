@@ -9,6 +9,7 @@ namespace ForHeavensSake;
 
 public class Player
 {
+	public Vector2 SpawnPosition;
 	public Vector2 Position;
 	public readonly Vector2 Size = new Vector2(64, 64);
 	public Rectangle Bounds => new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.Y / 2, (int)Size.X, (int)Size.Y);
@@ -50,6 +51,13 @@ public class Player
 	
 	public void Update()
 	{
+		HandleInput();
+
+		for (int i = 0; i < 3; i++)
+		{
+			UpdateMovement();
+			UpdateCamera();
+		}
 	}
 
 	public void UpdateMovement()
@@ -57,23 +65,24 @@ public class Player
 		var nextHitbox = Bounds;
 		nextHitbox.Offset((int)Velocity.X, (int)Velocity.Y);
 		
-		Position += new Vector2(Velocity.X, MathHelper.Clamp(Velocity.Y, float.MinValue, Grounded() ? 0 : float.MaxValue));
-
-		var visualPosition = Position - FHS.ScreenPosition;
-		if (visualPosition.Y > FHS.ScreenSize.Y * 0.75f && Velocity.Y > 0 && FHS.ScreenPosition.Y < FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40)
-			FHS.ScreenPosition += Velocity;
-		if (visualPosition.Y < FHS.ScreenSize.Y * 0.25f && Velocity.Y < 0)
-			FHS.ScreenPosition += Velocity;
+		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > 400;
 		
-		if (visualPosition.X > FHS.ScreenSize.X * 0.75f && Velocity.X > 0)
-			FHS.ScreenPosition += Velocity;
-		if (visualPosition.X < FHS.ScreenSize.X * 0.25f && Velocity.X < 0)
-			FHS.ScreenPosition += Velocity;
-		
-		FHS.ScreenPosition = Vector2.Clamp(FHS.ScreenPosition, new Vector2(float.MinValue), new Vector2(float.MaxValue, FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40));
+		Position += new Vector2(outerEdges ? 0 : Velocity.X, MathHelper.Clamp(Velocity.Y, float.MinValue, Grounded() ? 0 : float.MaxValue));
 		
 		Velocity.X = 0;
 		Velocity.Y = MathHelper.Lerp(Velocity.Y, Speed * 1.5f, 0.005f);
+	}
+
+	public void UpdateCamera()
+	{
+		var visualPosition = Position - FHS.ScreenPosition;
+		if (visualPosition.Y > FHS.ScreenSize.Y * 0.75f && Velocity.Y > 0 && FHS.ScreenPosition.Y < FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40)
+			FHS.ScreenPosition.Y += Velocity.Y;
+		if (visualPosition.Y < FHS.ScreenSize.Y * 0.25f && Velocity.Y < 0)
+			FHS.ScreenPosition.Y += Velocity.Y;
+		
+		FHS.ScreenPosition = Vector2.Clamp(FHS.ScreenPosition, new Vector2(float.MinValue), new Vector2(float.MaxValue, FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40));
+
 	}
 	
 	public void Draw()

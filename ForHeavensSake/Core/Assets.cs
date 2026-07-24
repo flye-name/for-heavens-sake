@@ -21,6 +21,7 @@ public static class Assets
 
 		TestSound = LoadSound("TestSound");
 		
+		FHS.FontSystem = new();
 		FHS.FontSystem.AddFont(File.ReadAllBytes(@"Content/Fonts/SpaceMono.ttf"));
 		
 		Saving.Save();

@@ -1,6 +1,7 @@
 using ForHeavensSake.Core;
 using ForHeavensSake.Core.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 namespace ForHeavensSake;
@@ -14,15 +15,24 @@ public partial class FHS
 	
 	protected override void Update(GameTime gameTime)
 	{
-		Input.Update();
-		
+		Input.UpdateCurrent();
+
 		if (!InGame)
-			return;
-		
-		for (int i = 0; i < 3; i++)
-			Player.UpdateMovement();
-		
-		Player.Update();
+		{
+			MainMenu.HandleInput();
+		}
+		else
+		{
+			Player.Update();
+		}
+
+		if (Input.JustPressed(Keys.Escape))
+		{
+			Saving.Save();
+			Instance.Exit();
+		}
+
+		Input.UpdatePrevious();
 		
 		base.Update(gameTime);
 	}

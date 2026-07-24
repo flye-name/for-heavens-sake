@@ -33,6 +33,7 @@ public partial class FHS : Game
 		ScreenSize = new Vector2(display.Width, display.Height);
 
 		Player.Position = ScreenSize / 2f;
+		Player.SpawnPosition = Player.Position;
 			
 		base.Initialize();
 	}
