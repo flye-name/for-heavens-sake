@@ -4,6 +4,7 @@ using ForHeavensSake.Core.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace ForHeavensSake;
 
@@ -22,21 +23,29 @@ public class Player
 	public bool CollidingWithTileFloor;
 	public int JumpLeewayTime;
 	public int JumpDelay;
+	public int DamageDelay;
+	public int BestHeight;
+	public int LastGroundedHeight;
+	public int DisappointmentDelay;
+	public bool PlayedDisappointmentSound;
+	
 	public const float Speed = 5f;
     public Vector2 Scale = new(1, 1);
 
+    public bool Disappointment() => Position.Y > LastGroundedHeight + FHS.TileSize * 7 || DamageDelay > 0 || DisappointmentDelay > 0; 
+    
     public bool Grounded() => (CollidingWithTileFloor || Position.Y > FHS.GroundLevel * FHS.TileSize) && Velocity.Y >= -0.5f;
 	
 	
     public void Update()
     {
-	    JumpLeewayTime--;
-	    JumpDelay--;
+	    BestHeight = Math.Max((int)Position.Y, BestHeight);
 
-	    if (Velocity.Y < 0 && JumpDelay < 3)
-		    JumpDelay = 3;
+	    HandleMusic();
+	    
+	    HandleDelays();
 		
-	    UpdateCollision();
+	    HandleTiles();
 		
 	    HandleInput();
 		
@@ -45,6 +54,51 @@ public class Player
 		    UpdateMovement();
 		    UpdateCamera();
 	    }
+	    
+	    if (Grounded())
+	    {
+		    LastGroundedHeight = (int)Position.Y;
+	    }
+	    else if (Disappointment())
+	    {
+		    if (DisappointmentDelay < 0 && MediaPlayer.State == MediaState.Playing)
+			    Assets.Sounds.FallInstance.Play();
+		    
+		    DisappointmentDelay = 100; 
+	    }
+
+	    Console.WriteLine(LastGroundedHeight);
+	    Console.WriteLine(Position.Y);
+	    
+	    ResetFields();
+    }
+
+    public void HandleMusic()
+    {
+	    if (MediaPlayer.State == MediaState.Stopped && !Disappointment())
+	    {
+		    Assets.Sounds.FallInstance.Stop();
+		    
+		    MediaPlayer.Play(Assets.Music);
+	    }
+	    
+	    if (Disappointment())
+		    MediaPlayer.Stop();
+    }
+
+    public void HandleDelays()
+    {
+	    DisappointmentDelay--;
+	    JumpLeewayTime--;
+	    JumpDelay--;
+	    DamageDelay--;
+
+	    if (Velocity.Y < 0 && JumpDelay < 3)
+		    JumpDelay = 3;
+    }
+    
+    public void ResetFields()
+    {
 
 	    CollidingWithTileLeft = false;
 	    CollidingWithTileRight = false;
@@ -98,8 +152,16 @@ public class Player
 			VisualDirection = 1;
 
 		if (Input.JustClickedL)
-			Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition);
-		
+		{
+			var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
+			var type = (byte)3;
+			if (rand.Next(4) == 0)
+				type = 2;
+			else if (rand.Next(3) == 0)
+				type = 1;
+			Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition, type);
+		}
+
 		if (Input.JustClickedR)
 			Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
 
@@ -107,6 +169,19 @@ public class Player
 			Hurt(1);
 		if (Input.JustPressed(Keys.F))
 			Hurt(-1);
+		if (Input.KeyboardCurrent.IsKeyDown(Keys.T))
+		{
+			Position.Y -= 40;
+			FHS.ScreenPosition.Y -= 40;
+		}
+		if (Input.KeyboardCurrent.IsKeyDown(Keys.R))
+		{
+			Position.X += 10;
+		}
+		if (Input.KeyboardCurrent.IsKeyDown(Keys.E))
+		{
+			Position.X -= 10;
+		}
 
 		if (Input.JustClickedR && Input.KeyboardCurrent.IsKeyDown(Keys.LeftControl))
 		{
@@ -114,7 +189,7 @@ public class Player
 		}
 	}
 
-	public void UpdateCollision()
+	public void HandleTiles()
 	{
 		var nextBounds = Bounds;
 		nextBounds.Offset((int)Velocity.X, -5);
@@ -130,8 +205,18 @@ public class Player
 				if (Tiles.Grid[i, j] == 0)
 					continue;
 
+
+				if (Tiles.Grid[i, j] > 3)
+				{
+					if (Tiles.Grid[i, j]++ > 120)
+					{
+						Tiles.RemoveTile(i, j);
+					}
+				}
+
 				var shouldMoveX = false;
 				var shouldMoveY = false;
+				var collided = false;
 				var hitbox = new Rectangle(i * FHS.TileSize, (FHS.GroundLevel - j) * FHS.TileSize, FHS.TileSize, FHS.TileSize);
 				if (nextBounds.Intersects(hitbox))
 				{
@@ -140,39 +225,54 @@ public class Player
 					
 					if (hitbox.X > Position.X)
 						CollidingWithTileRight = true;
-					
+
+					collided = true;
 					shouldMoveX = true;
 				}
 				if (headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height < Position.Y)
 				{
 					CollidingWithTileHead = true;
+					collided = true;
 				}
 				if (FloorBounds.Intersects(hitbox) && hitbox.Y > Position.Y)
 				{
 					JumpLeewayTime = 15;
 					CollidingWithTileFloor = true;
+
+					if (Tiles.Grid[i, j] == 3)
+						Tiles.Grid[i, j]++;
+					
+					collided = true;
 					shouldMoveY = true;
 				}
 				
-				if (shouldMoveX || shouldMoveY)
+				if (collided)
 				{
 					var dir = new Vector2(hitbox.Center.X, hitbox.Center.Y) - Position;
 					dir.Normalize();
 
-					var attempts = 0;
-					
-					while (attempts++ < 30 && (hitbox.X + hitbox.Width < Position.X || hitbox.X > Position.X + Size.X) && Bounds.Intersects(hitbox) && hitbox.Y > FloorBounds.Y)
+					if (Tiles.Grid[i, j] == 2 && !shouldMoveY && DamageDelay < 0)
 					{
-						Position.X -= dir.X;
+						Hurt(dir.X < 0 ? 1 : -1);
 					}
 
-					attempts = 0;
-
-					var floorBounds = FloorBounds;
-					floorBounds.Offset(0, -2);
-					while (attempts++ < 10 && floorBounds.Intersects(hitbox) && !headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height / 2 > FloorBounds.Y && (Velocity.Y == 0 || MathF.Sign(dir.Y) == MathF.Sign(Velocity.Y)))
+					if (shouldMoveX || shouldMoveY) 
 					{
-						Position.Y -= dir.Y;
+						var attempts = 0;
+						
+						while (attempts++ < 30 && (hitbox.X + hitbox.Width < Position.X || hitbox.X > Position.X + Size.X) && Bounds.Intersects(hitbox) && hitbox.Y > FloorBounds.Y)
+						{
+							Position.X -= dir.X;
+						}
+	
+						attempts = 0;
+	
+						var floorBounds = FloorBounds;
+						floorBounds.Offset(0, -2);
+						while (attempts++ < 10 && floorBounds.Intersects(hitbox) && !headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height / 2 > FloorBounds.Y && (Velocity.Y == 0 || MathF.Sign(dir.Y) == MathF.Sign(Velocity.Y)))
+						{
+							Position.Y -= dir.Y;
+						}
 					}
 				}
 			}
@@ -204,7 +304,7 @@ public class Player
 			var rand = new Random(FHS.AmbientTimer);
 			
 			if (FHS.AmbientTimer % 20 == 0)
-				Assets.Sounds.Step.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+				Assets.Sounds.Step.Play(0.2f, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 			if (FHS.AmbientTimer % 10 == 0)
 				ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(-Velocity.X, rand.Next(-4, -1)), 30, ParticleType.FootStep);
 		}
@@ -230,6 +330,8 @@ public class Player
 
 	public void Hurt(int direction)
 	{
+		DamageDelay = 20;
+		
 		Velocity.X = direction * 10;
 		Velocity.Y = 10;
 
@@ -251,7 +353,7 @@ public class Player
 
 		var quality = 8;
 		var position = new Vector2(MathF.Floor(Position.X / quality) * quality, MathF.Floor(Position.Y / quality) * quality);
-		var color = MathF.Abs(Velocity.X) > 8f && FHS.AmbientTimer % 3 == 0 ? Color.Red : Color.White;
+		var color = DamageDelay > 0 && FHS.AmbientTimer % 3 == 0 ? Color.Red : Color.White;
 		
 		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, new Color(116, 131, 250), 0, texture.Size / 2f, Scale * 2.5f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
 		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, color, 0, texture.Size / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);

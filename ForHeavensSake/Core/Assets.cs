@@ -60,6 +60,8 @@ public static class Assets
 		public static SoundEffect Hurt;
 		public static SoundEffect TilePlace;
 		public static SoundEffect TileBreak;
+		
+		public static SoundEffectInstance FallInstance;
 
 		public static void LoadAssets()
 		{
@@ -72,6 +74,8 @@ public static class Assets
 			Hurt = LoadSound("Hurt");
 			TilePlace = LoadSound("BlockPlace");
 			TileBreak = LoadSound("BlockBreak");
+
+			FallInstance = Fall.CreateInstance();
 		}
 
 		public static void Dispose()
@@ -85,6 +89,8 @@ public static class Assets
 			Hurt.Dispose();
 			TilePlace.Dispose();
 			TileBreak.Dispose();
+			
+			FallInstance.Dispose();
 		}
 	}
 	
