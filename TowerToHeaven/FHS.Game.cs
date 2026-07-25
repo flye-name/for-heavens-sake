@@ -35,7 +35,6 @@ public partial class FHS
 
 		if (Input.JustPressed(Keys.Escape))
 		{
-			Saving.Save();
 			Instance.Exit();
 		}
 
