@@ -32,6 +32,7 @@ public partial class FHS
 		
 		GraphicsDevice.SetRenderTarget(FinalRender);
 		GraphicsDevice.Clear(Color.Transparent);
+
 		SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
 		SpriteBatch.Draw(PixelRender, new Rectangle(0, 0, (int)ScreenSize.X * 2, (int)ScreenSize.Y * 2), Color.White);
 		SpriteBatch.End();
@@ -59,7 +60,17 @@ public partial class FHS
 			Tiles.Draw();
             ParticleSystem.Draw();
         }
+
+		DrawCursor();
 		
+		var rand = new Random(new Random(AmbientTimer).Next(int.MaxValue));
+		SpriteBatch.Draw(Assets.Textures.Noise, Vector2.Zero, new Rectangle(rand.Next((int)ScreenSize.X), rand.Next((int)ScreenSize.Y), (int)ScreenSize.X, (int)ScreenSize.Y), Color.White with { A = 0 } * 0.03f);
+		
+		SpriteBatch.End();
+	}
+
+	public static void DrawCursor()
+	{
 		SpriteBatch.Draw(Assets.Textures.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 
 		var pos = Input.MousePosition + ScreenPosition;
@@ -72,8 +83,5 @@ public partial class FHS
 		SpriteBatch.Draw(Assets.Textures.Placeholder, pos + new Vector2(Assets.Textures.Placeholder.Width * 2, 0), null, Color.White * opacity, 0, Vector2.Zero, new Vector2(0.1f, 2), SpriteEffects.None, 0);
 		SpriteBatch.Draw(Assets.Textures.Placeholder, pos, null, Color.White * opacity, 0, Vector2.Zero, new Vector2(2, 0.1f), SpriteEffects.None, 0);
 		SpriteBatch.Draw(Assets.Textures.Placeholder, pos + new Vector2(0, Assets.Textures.Placeholder.Height * 2), null, Color.White * opacity, 0, Vector2.Zero, new Vector2(2, 0.1f), SpriteEffects.None, 0);
-
-		
-		SpriteBatch.End();
 	}
 }

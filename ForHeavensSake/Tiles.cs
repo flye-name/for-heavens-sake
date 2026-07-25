@@ -38,14 +38,37 @@ public static class Tiles
 		{
 			Assets.Sounds.TileBreak.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 
-            SpawnParticle(pos, new Vector2(1, -1) * 5, 100);
-            SpawnParticle(pos, new Vector2(-1, 1) * 5, 100);
-            SpawnParticle(pos, new Vector2(-1, -1) * 5, 100);
-            SpawnParticle(pos, new Vector2(1, 1) * 5, 100);
-        }
+			SpawnParticle(pos, new Vector2(1, -1) * 5, 100);
+			SpawnParticle(pos, new Vector2(-1, 1) * 5, 100);
+			SpawnParticle(pos, new Vector2(-1, -1) * 5, 100);
+			SpawnParticle(pos, new Vector2(1, 1) * 5, 100);
+		}
 		
 		Grid[x, y] = 0;
-    }
+	}
+	
+	public static void RemoveAllTiles()
+	{
+		for (int i = 0; i < MaxTilesX; i++)
+		{
+			for (int j = 0; j < MaxTilesX; j++)
+			{
+				var pos = new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize;
+				
+				if (Grid[i, j] > 0)
+				{
+					Assets.Sounds.TileBreak.Play(0.01f, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+
+					SpawnParticle(pos, new Vector2(1, -1) * 5, 100);
+					SpawnParticle(pos, new Vector2(-1, 1) * 5, 100);
+					SpawnParticle(pos, new Vector2(-1, -1) * 5, 100);
+					SpawnParticle(pos, new Vector2(1, 1) * 5, 100);
+				}
+		
+				Grid[i, j] = 0;
+			}
+		}
+	}
 
 	public static void Draw()
 	{

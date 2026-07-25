@@ -19,15 +19,18 @@ public static class Assets
 	public static class Textures
 	{
 		public static Texture2D Placeholder;
+		public static Texture2D Noise;
 
         public static void LoadAssets()
 		{
 			Placeholder = LoadTexture("Placeholder");
-        }
+			Noise = LoadTexture("Noise");
+		}
 
 		public static void Dispose()
 		{
 			Placeholder.Dispose();
+			Noise.Dispose();
 		}
     }
 

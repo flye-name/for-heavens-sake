@@ -92,6 +92,11 @@ public class Player
 		
 		if (Input.JustClickedR)
 			Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
+
+		if (Input.JustClickedR && Input.KeyboardCurrent.IsKeyDown(Keys.LeftControl))
+		{
+			Tiles.RemoveAllTiles();
+		}
 	}
 
 	public void UpdateCollision()
