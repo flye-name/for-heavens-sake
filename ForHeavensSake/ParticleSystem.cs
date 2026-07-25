@@ -6,49 +6,66 @@ namespace ForHeavensSake;
 
 public class ParticleSystem
 {
-    public class Particle(Vector2 position, Vector2 velocity, int lifetime)
+    public record struct Particle()
     {
+        public Vector2 Position;
+        public Vector2 Velocity;
         public int TimeLeft;
-        public int Lifetime = lifetime;
-        public Vector2 Velocity = velocity;
-        public Vector2 Position = position;
         public float Rotation;
-        public float Timer;
     }
 
-    public static List<Particle> Particles
+    public const int MaxParticles = 500;
+    public static Particle[] Particles = new Particle[500];
+
+    public static int SpawnParticle(Vector2 position, Vector2 velocity, int lifetime)
     {
-        get;
-        internal set;
-    } = [];
+        int index = 0;
+
+        while (Particles[index].TimeLeft > 0 && index < MaxParticles - 1)
+        {
+            index++;
+        }
+
+        Particles[index] = new Particle()
+        {
+            Position = position,
+            Velocity = velocity,
+            TimeLeft = lifetime
+        };
+
+        return index;
+    }
 
     public static void Update()
     {
-        for (int k = 0; k < Particles.Count; k++)
+        for (int k = 0; k < MaxParticles; k++)
         {
-            var particle = Particles[k];
+            ref var particle = ref Particles[k];
+            
+            if (particle.TimeLeft < 0)
+                continue;
 
-            particle.TimeLeft++;
+            particle.TimeLeft--;
             particle.Position += particle.Velocity;
             particle.Velocity.Y += 0.5f;
 
-            if (++particle.Timer >= 10)
+            if (particle.TimeLeft % 10 == 0)
             {
-                particle.Rotation += MathHelper.PiOver2;
-                particle.Timer = 0;
+                particle.Rotation += MathHelper.PiOver4;
             }
         }
-
-        Particles.RemoveAll(p => p.TimeLeft >= p.Lifetime);
     }
 	
 	public static void Draw()
 	{
 		var texture = Assets.Textures.Placeholder;
 
-        for (int k = 0; k < Particles.Count; k++)
+        for (int k = 0; k < MaxParticles; k++)
         {
             var particle = Particles[k];
+            
+            if (particle.TimeLeft <= 0)
+                continue;
 
             FHS.SpriteBatch.Draw(texture, particle.Position - FHS.ScreenPosition, null, new Color(116, 131, 250), particle.Rotation, texture.Size / 2f, 1f, SpriteEffects.None, 0);
         }

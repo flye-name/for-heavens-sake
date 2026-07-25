@@ -11,6 +11,7 @@ public static class Assets
 	public static Texture2D LoadTexture(string path) => FHS.Instance.Content.Load<Texture2D>("Images/" + path);
 	public static SoundEffect LoadSound(string path) => FHS.Instance.Content.Load<SoundEffect>("Sounds/" + path);
 	public static Song LoadSong(string path) => FHS.Instance.Content.Load<Song>("Music/" + path);
+	public static Effect LoadEffect(string path) => FHS.Instance.Content.Load<Effect>("Effects/Compiled/" + path);
 	
 
 	public static Song Music;
@@ -36,7 +37,7 @@ public static class Assets
 
         public static void LoadAssets()
         {
-            CRTBarrelFilter = FHS.Instance.Content.Load<Effect>("Content/Effects/CRTBarrel");
+            CRTBarrelFilter = LoadEffect("CRT");
         }
 
         public static void Dispose()
@@ -90,6 +91,7 @@ public static class Assets
 		
 		Textures.LoadAssets();
 		Sounds.LoadAssets();
+		Effects.LoadAssets();
 		
 		FHS.FontSystem = new();
 		FHS.FontSystem.AddFont(File.ReadAllBytes(@"Content/Fonts/SpaceMono.ttf"));
@@ -102,8 +104,8 @@ public static class Assets
 		Music.Dispose();
 		
 		Textures.Dispose();
-		
 		Sounds.Dispose();
+		Effects.Dispose();
 		
 		FHS.FontSystem.Dispose();
 	}

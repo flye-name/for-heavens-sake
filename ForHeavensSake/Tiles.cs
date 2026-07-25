@@ -5,14 +5,6 @@ using static ForHeavensSake.ParticleSystem;
 
 namespace ForHeavensSake;
 
-public enum TileType : byte
-{
-	Inactive,
-	Normal,
-	SpikeSides,
-	
-}
-
 public static class Tiles
 {
 	public const int MaxTilesX = 30;
@@ -46,10 +38,10 @@ public static class Tiles
 		{
 			Assets.Sounds.TileBreak.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 
-            Particles.Add(new Particle(pos, new Vector2(1, -1) * 5, 100));
-            Particles.Add(new Particle(pos, new Vector2(-1, 1) * 5, 100));
-            Particles.Add(new Particle(pos, new Vector2(-1, -1) * 5, 100));
-            Particles.Add(new Particle(pos, new Vector2(1, 1) * 5, 100));
+            SpawnParticle(pos, new Vector2(1, -1) * 5, 100);
+            SpawnParticle(pos, new Vector2(-1, 1) * 5, 100);
+            SpawnParticle(pos, new Vector2(-1, -1) * 5, 100);
+            SpawnParticle(pos, new Vector2(1, 1) * 5, 100);
         }
 		
 		Grid[x, y] = 0;
@@ -61,9 +53,23 @@ public static class Tiles
 		{
 			for (int j = 0; j < MaxTilesY; j++)
 			{
-				if (Grid[i, j] > 0)
+				switch (Grid[i, j])
 				{
-					FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+					case 0:
+						break;
+					
+					case 1:
+						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						break;
+					
+					case 2: 
+						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero,  new Vector2(2.1f, 0.1f), SpriteEffects.None, 0);
+						break;
+					
+					default:
+						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Green, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						break;
 				}
 			}
 		}

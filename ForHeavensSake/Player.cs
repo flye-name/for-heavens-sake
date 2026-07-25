@@ -13,10 +13,11 @@ public class Player
 	public Vector2 Position;
 	public readonly Vector2 Size = new Vector2(64, 64);
 	public Rectangle Bounds => new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y - (int)Size.Y / 2, (int)Size.X, (int)Size.Y);
-	public Rectangle FloorBounds => new Rectangle((int)Position.X - (int)Size.X / 2, (int)Position.Y + (int)Size.Y / 2, (int)Size.X, 4);
+	public Rectangle FloorBounds => new Rectangle((int)Position.X - (int)Size.X / 2 + 4, (int)Position.Y + (int)Size.Y / 2 - 8, (int)Size.X - 8, 10);
 	public Vector2 Velocity;
 	public int VisualDirection = 1;
-	public bool CollidingWithTileX;
+	public bool CollidingWithTileLeft;
+	public bool CollidingWithTileRight;
 	public bool CollidingWithTileHead;
 	public bool CollidingWithTileFloor;
 	public int JumpLeewayTime;
@@ -24,8 +25,36 @@ public class Player
 	public const float Speed = 5f;
     public Vector2 Scale = new(1, 1);
 
-    public bool Grounded() => (CollidingWithTileFloor || Position.Y > FHS.GroundLevel * FHS.TileSize) && Velocity.Y > 0;
+    public bool Grounded() => (CollidingWithTileFloor || Position.Y > FHS.GroundLevel * FHS.TileSize) && Velocity.Y >= -0.5f;
 	
+	
+    public void Update()
+    {
+	    JumpLeewayTime--;
+	    JumpDelay--;
+
+	    if (Velocity.Y < 0 && JumpDelay < 3)
+		    JumpDelay = 3;
+		
+	    UpdateCollision();
+		
+	    HandleInput();
+		
+	    for (int i = 0; i < 3; i++)
+	    {
+		    UpdateMovement();
+		    UpdateCamera();
+	    }
+
+	    CollidingWithTileLeft = false;
+	    CollidingWithTileRight = false;
+	    CollidingWithTileHead = false;
+	    CollidingWithTileFloor = false;
+
+	    Scale.X = MathHelper.Lerp(1, Scale.X, 0.9f);
+	    Scale.Y = MathHelper.Lerp(1, Scale.Y, 0.9f);
+    }
+    
 	public void HandleInput()
 	{
 		var jump = Input.KeyboardCurrent.IsKeyDown(Keys.W) || Input.KeyboardCurrent.IsKeyDown(Keys.Up) || Input.KeyboardCurrent.IsKeyDown(Keys.Space);
@@ -42,12 +71,16 @@ public class Player
 
 		var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
 		var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
-		if (left && right)
-			Velocity.X = 0;
-		else if (left)
-			Velocity.X = -Speed;
-		else if (right)
-			Velocity.X = Speed;
+
+		if (Velocity.Y < 0.75f || Grounded())
+		{
+			if (left && right)
+				Velocity.X = 0;
+			else if (left && !CollidingWithTileLeft)
+				Velocity.X = -Speed;
+			else if (right && !CollidingWithTileRight)
+				Velocity.X = Speed;
+		}
 
 		if (left)
 			VisualDirection = -1;
@@ -60,42 +93,16 @@ public class Player
 		if (Input.JustClickedR)
 			Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
 	}
-	
-	public void Update()
-	{
-		JumpLeewayTime--;
-		JumpDelay--;
-
-		if (Velocity.Y < 0 && JumpDelay < 3)
-			JumpDelay = 3;
-		
-		UpdateCollision();
-		
-		HandleInput();
-		
-		for (int i = 0; i < 3; i++)
-		{
-			UpdateMovement();
-			UpdateCamera();
-		}
-
-		CollidingWithTileX = false;
-		CollidingWithTileHead = false;
-		CollidingWithTileFloor = false;
-
-		Scale.X = MathHelper.Lerp(1, Scale.X, 0.9f);
-        Scale.Y = MathHelper.Lerp(1, Scale.Y, 0.9f);
-    }
 
 	public void UpdateCollision()
 	{
 		var nextBounds = Bounds;
 		nextBounds.Offset((int)Velocity.X, -5);
-		nextBounds.Inflate(0, -16);
+		nextBounds.Inflate(-2, -16);
 		
 		var headBounds = FloorBounds;
-		headBounds.Offset(0, (int)-Size.Y);
-		headBounds.Inflate(-16, 0);
+		headBounds.Offset(0, (int)-Size.Y + 10);
+		headBounds.Inflate(-16, 20);
 		for (int i = 0; i < Tiles.MaxTilesX; i++)
 		{
 			for (int j = 0; j < Tiles.MaxTilesY; j++)
@@ -108,16 +115,21 @@ public class Player
 				var hitbox = new Rectangle(i * FHS.TileSize, (FHS.GroundLevel - j) * FHS.TileSize, FHS.TileSize, FHS.TileSize);
 				if (nextBounds.Intersects(hitbox))
 				{
-					CollidingWithTileX = true;
+					if (hitbox.X < Position.X)
+						CollidingWithTileLeft = true;
+					
+					if (hitbox.X > Position.X)
+						CollidingWithTileRight = true;
+					
 					shouldMoveX = true;
 				}
-				if (headBounds.Intersects(hitbox))
+				if (headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height < Position.Y)
 				{
 					CollidingWithTileHead = true;
 				}
-				if (FloorBounds.Intersects(hitbox))
+				if (FloorBounds.Intersects(hitbox) && hitbox.Y > Position.Y)
 				{
-					JumpLeewayTime = 20;
+					JumpLeewayTime = 15;
 					CollidingWithTileFloor = true;
 					shouldMoveY = true;
 				}
@@ -126,15 +138,25 @@ public class Player
 				{
 					var dir = new Vector2(hitbox.Center.X, hitbox.Center.Y) - Position;
 					dir.Normalize();
-					if (shouldMoveX)
+
+					var attempts = 0;
+					
+					while (attempts++ < 30 && (hitbox.X + hitbox.Width < Position.X || hitbox.X > Position.X + Size.X) && Bounds.Intersects(hitbox) && hitbox.Y > FloorBounds.Y)
+					{
 						Position.X -= dir.X;
-					if (shouldMoveY && (Velocity.Y == 0 || MathF.Sign(dir.Y) == MathF.Sign(Velocity.Y)))
+					}
+
+					attempts = 0;
+
+					var floorBounds = FloorBounds;
+					floorBounds.Offset(0, -2);
+					while (attempts++ < 10 && floorBounds.Intersects(hitbox) && !headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height / 2 > FloorBounds.Y && (Velocity.Y == 0 || MathF.Sign(dir.Y) == MathF.Sign(Velocity.Y)))
+					{
 						Position.Y -= dir.Y;
+					}
 				}
 			}
 		}
-		
-		Console.WriteLine(CollidingWithTileHead);
 	}
 
 	public void UpdateMovement()
@@ -142,9 +164,6 @@ public class Player
 		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > FHS.TileSize * 8.5f + 4;
 		
 		var movement = new Vector2(outerEdges ? 0 : Velocity.X, MathHelper.Clamp(Velocity.Y, float.MinValue, Grounded() ? 0 : float.MaxValue));
-
-		if (CollidingWithTileX)
-			movement.X = 0;
 
 		if (CollidingWithTileFloor)
 		{
@@ -162,7 +181,7 @@ public class Player
 
 		if (Grounded() && MathF.Abs(movement.X) > 0 && FHS.AmbientTimer % 20 == 0)
 			Assets.Sounds.Step.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
-		
+
 		Velocity.X = 0;
 		Velocity.Y = MathHelper.Lerp(Velocity.Y, Speed * 1.5f, 0.005f);
 	}
@@ -181,10 +200,12 @@ public class Player
 	public void Draw()
 	{
 		var texture = Assets.Textures.Placeholder;
+
+		var quality = 8;
+		var position = new Vector2(MathF.Floor(Position.X / quality) * quality, MathF.Floor(Position.Y / quality) * quality);
 		
-		
-		FHS.SpriteBatch.Draw(texture, new Vector2(600, 800) - FHS.ScreenPosition, null, new Color(116, 131, 250), 0, texture.Size / 2f, 2f, SpriteEffects.None, 0);
-		
-		FHS.SpriteBatch.Draw(texture, new Vector2(MathF.Floor(Position.X / 2) * 2, MathF.Floor(Position.Y / 2) * 2) - FHS.ScreenPosition, null, Color.White, 0, texture.Size / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, new Color(116, 131, 250), 0, texture.Size / 2f, Scale * 2.5f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, Color.White, 0, texture.Size / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+
 	}
 }

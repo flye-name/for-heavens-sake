@@ -12,6 +12,8 @@ public partial class FHS
 	{
 		SpriteBatch = new SpriteBatch(GraphicsDevice);
 		MainRender = new RenderTarget2D(GraphicsDevice, (int)ScreenSize.X, (int)ScreenSize.Y);
+		PixelRender = new RenderTarget2D(GraphicsDevice, (int)ScreenSize.X, (int)ScreenSize.Y);
+		FinalRender = new RenderTarget2D(GraphicsDevice, (int)ScreenSize.X, (int)ScreenSize.Y);
 		
 		Assets.Load();
 		
@@ -22,6 +24,8 @@ public partial class FHS
 	{
 		SpriteBatch.Dispose();
 		MainRender.Dispose();
+		PixelRender.Dispose();
+		FinalRender.Dispose();
 		Assets.Unload();
 		
 		base.UnloadContent();
