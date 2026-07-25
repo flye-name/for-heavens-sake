@@ -16,7 +16,11 @@ public partial class FHS
 	
 	protected override void Update(GameTime gameTime)
 	{
+		ModeSwitchingTimer++;
+		
 		AmbientTimer++;
+
+		UpdateModes();
 		
 		Input.UpdateCurrent();
 
