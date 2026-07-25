@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace ForHeavensSake;
+namespace TowerToHeaven;
 
 public partial class Player
 {

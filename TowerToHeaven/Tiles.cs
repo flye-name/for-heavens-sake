@@ -1,9 +1,9 @@
-using ForHeavensSake.Core;
+using TowerToHeaven.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using static ForHeavensSake.ParticleSystem;
+using static TowerToHeaven.ParticleSystem;
 
-namespace ForHeavensSake;
+namespace TowerToHeaven;
 
 public static class Tiles
 {

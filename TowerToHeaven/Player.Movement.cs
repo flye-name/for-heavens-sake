@@ -1,8 +1,8 @@
-using ForHeavensSake.Core;
+using TowerToHeaven.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace ForHeavensSake;
+namespace TowerToHeaven;
 
 public partial class Player
 {

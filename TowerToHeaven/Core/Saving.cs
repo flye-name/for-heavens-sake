@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Storage;
 
-namespace ForHeavensSake.Core;
+namespace TowerToHeaven.Core;
 
 public static class Saving
 {

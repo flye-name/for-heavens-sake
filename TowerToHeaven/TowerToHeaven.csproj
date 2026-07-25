@@ -5,7 +5,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>ForHeavensSake</RootNamespace>
+        <RootNamespace>TowerToHeaven</RootNamespace>
         <OutputName>Tower to Heaven</OutputName>
     </PropertyGroup>
 

@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "FNA\FNA.Core.csproj", "{35253CE1-C864-4CD3-8249-4D1319748E8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForHeavensSake", "ForHeavensSake\ForHeavensSake.csproj", "{BAF711D2-12AE-4058-A0F6-DEABDF7E73C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerToHeaven", "TowerToHeaven\TowerToHeaven.csproj", "{BAF711D2-12AE-4058-A0F6-DEABDF7E73C1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontStashSharp.FNA.Core", "FontStashSharp\src\XNA\FontStashSharp.FNA.Core.csproj", "{6A18A3A5-2C40-4EE8-9222-3524DE2CCCE6}"
 EndProject

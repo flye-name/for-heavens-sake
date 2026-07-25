@@ -1,9 +1,9 @@
-using ForHeavensSake.Core;
-using ForHeavensSake.Core.UI;
+using TowerToHeaven.Core;
+using TowerToHeaven.Core.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ForHeavensSake;
+namespace TowerToHeaven;
 
 public partial class FHS
 {

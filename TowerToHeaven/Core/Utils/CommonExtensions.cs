@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ForHeavensSake;
+namespace TowerToHeaven;
 
 public static class CommonExtensions
 {

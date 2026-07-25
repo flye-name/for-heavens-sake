@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using System.Reflection.Metadata;
 
-namespace ForHeavensSake.Core;
+namespace TowerToHeaven.Core;
 
 public static class Assets
 {

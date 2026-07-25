@@ -1,8 +1,8 @@
-using ForHeavensSake.Core.UI;
+using TowerToHeaven.Core.UI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace ForHeavensSake.Core;
+namespace TowerToHeaven.Core;
 
 public static class Input
 {

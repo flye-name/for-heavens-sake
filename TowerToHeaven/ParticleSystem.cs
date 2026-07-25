@@ -1,8 +1,8 @@
-using ForHeavensSake.Core;
+using TowerToHeaven.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ForHeavensSake;
+namespace TowerToHeaven;
 
 public enum ParticleType : byte
 {

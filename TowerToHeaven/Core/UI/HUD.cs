@@ -1,7 +1,7 @@
 using FontStashSharp;
 using Microsoft.Xna.Framework;
 
-namespace ForHeavensSake.Core.UI;
+namespace TowerToHeaven.Core.UI;
 
 public static class HUD
 {
