@@ -79,8 +79,8 @@ public static class Tiles
 
 	public static void Init()
 	{
-		var seedShift = 0;
-		for (int i = 0; i < 3; i++)
+		var seedShift = DateTime.Now.Microsecond + DateTime.Now.Second + DateTime.Now.Month + DateTime.Now.Day;
+		for (int i = 0; i < MaxTilesX; i++)
 		{
 			for (int j = 0; j < MaxTilesY; j++)
 			{
@@ -88,13 +88,10 @@ public static class Tiles
 				var type = (byte)(rand.Next(10) == 0 ? 254 : 255);
 
 				seedShift = rand.Next(int.MaxValue);
-				
-				PlaceTile(i, j, type, true);
-				rand = new Random(i + j + MaxTilesX - 1 + seedShift);
-				type = (byte)(rand.Next(10) == 0 ? 254 : 255);
-				PlaceTile(MaxTilesX - 1 - i, j, type, true);
-				
-				seedShift = rand.Next(int.MaxValue);
+				if (i < 4 || i > MaxTilesX - 5)
+					PlaceTile(i, j, type, true);
+				else if (rand.Next(100) == 0)
+					PlaceTile(i, j, 1, true);
 			}	
 		}
 	}

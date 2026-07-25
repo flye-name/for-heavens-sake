@@ -10,7 +10,7 @@ public partial class Player
 
 	public void Jump()
 	{
-		var jump = Input.KeyboardCurrent.IsKeyDown(Keys.W) || Input.KeyboardCurrent.IsKeyDown(Keys.Up) || Input.KeyboardCurrent.IsKeyDown(Keys.Space);
+		var jump = Input.KeyboardCurrent.IsKeyDown(Keys.Space);
 		if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
 		{
 			for (int i = 0; i < 5; i++)
@@ -42,6 +42,7 @@ public partial class Player
 		var headBounds = FloorBounds;
 		headBounds.Offset(0, (int)-Size.Y + 10);
 		headBounds.Inflate(-16, 20);
+		
 		for (int i = 0; i < Tiles.MaxTilesX; i++)
 		{
 			for (int j = 0; j < Tiles.MaxTilesY; j++)
@@ -127,7 +128,7 @@ public partial class Player
 
 	public void UpdateMovement()
 	{
-		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > FHS.ScreenSize.X / 2f - Size.X / 2f;
+		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > FHS.ScreenSize.X / 2f - Size.X * 4.5f;
 		
 		var movement = new Vector2(outerEdges ? 0 : Velocity.X, MathHelper.Clamp(Velocity.Y, float.MinValue, Grounded() ? 0 : float.MaxValue));
 
