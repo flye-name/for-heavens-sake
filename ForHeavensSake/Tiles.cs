@@ -1,6 +1,7 @@
 using ForHeavensSake.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static ForHeavensSake.ParticleSystem;
 
 namespace ForHeavensSake;
 
@@ -42,10 +43,17 @@ public static class Tiles
 			return;
 
 		if (Grid[x, y] > 0)
+		{
 			Assets.Sounds.TileBreak.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+
+            Particles.Add(new Particle(pos, new Vector2(1, -1) * 5, 100));
+            Particles.Add(new Particle(pos, new Vector2(-1, 1) * 5, 100));
+            Particles.Add(new Particle(pos, new Vector2(-1, -1) * 5, 100));
+            Particles.Add(new Particle(pos, new Vector2(1, 1) * 5, 100));
+        }
 		
 		Grid[x, y] = 0;
-	}
+    }
 
 	public static void Draw()
 	{

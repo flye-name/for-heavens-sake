@@ -43,7 +43,8 @@ public partial class FHS
 		{
 			Tiles.Draw();
 			Player.Draw();
-		}
+            ParticleSystem.Draw();
+        }
 		
 		SpriteBatch.Draw(Assets.Textures.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 		

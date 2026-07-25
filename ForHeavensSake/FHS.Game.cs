@@ -27,7 +27,8 @@ public partial class FHS
 		else
 		{
 			Player.Update();
-		}
+            ParticleSystem.Update();
+        }
 
 		if (Input.JustPressed(Keys.Escape))
 		{

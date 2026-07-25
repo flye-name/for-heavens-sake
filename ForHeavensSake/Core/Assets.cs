@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using System.Reflection.Metadata;
 
 namespace ForHeavensSake.Core;
 
@@ -18,18 +19,33 @@ public static class Assets
 	{
 		public static Texture2D Placeholder;
 
-		public static void LoadAssets()
+        public static void LoadAssets()
 		{
 			Placeholder = LoadTexture("Placeholder");
-		}
+        }
 
 		public static void Dispose()
 		{
 			Placeholder.Dispose();
 		}
-	}
+    }
 
-	public static class Sounds
+    public static class Effects
+    {
+        public static Effect CRTBarrelFilter;
+
+        public static void LoadAssets()
+        {
+            CRTBarrelFilter = FHS.Instance.Content.Load<Effect>("Content/Effects/CRTBarrel");
+        }
+
+        public static void Dispose()
+        {
+            CRTBarrelFilter.Dispose();
+        }
+    }
+
+    public static class Sounds
 	{
 		public static SoundEffect TestSound;
 		public static SoundEffect Step;
