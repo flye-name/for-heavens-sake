@@ -14,12 +14,12 @@ public static class Assets
 	public static Effect LoadEffect(string path) => FHS.Instance.Content.Load<Effect>("Effects/Compiled/" + path);
 	
 
-	public static Song Music;
+	public static Song? Music;
 
 	public static class Textures
 	{
-		public static Texture2D Placeholder;
-		public static Texture2D Noise;
+		public static Texture2D? Placeholder;
+		public static Texture2D? Noise;
 
         public static void LoadAssets()
 		{
@@ -29,14 +29,14 @@ public static class Assets
 
 		public static void Dispose()
 		{
-			Placeholder.Dispose();
-			Noise.Dispose();
+			Placeholder?.Dispose();
+			Noise?.Dispose();
 		}
     }
 
     public static class Effects
     {
-        public static Effect CRTBarrelFilter;
+        public static Effect? CRTBarrelFilter;
 
         public static void LoadAssets()
         {
@@ -45,52 +45,52 @@ public static class Assets
 
         public static void Dispose()
         {
-            CRTBarrelFilter.Dispose();
+            CRTBarrelFilter?.Dispose();
         }
     }
 
     public static class Sounds
 	{
-		public static SoundEffect TestSound;
-		public static SoundEffect Step;
-		public static SoundEffect MenuSelect;
-		public static SoundEffect Blip;
-		public static SoundEffect Jump;
-		public static SoundEffect Fall;
-		public static SoundEffect Hurt;
-		public static SoundEffect TilePlace;
-		public static SoundEffect TileBreak;
+		public static SFX? TestSound;
+		public static SFX? Step;
+		public static SFX? MenuSelect;
+		public static SFX? Blip;
+		public static SFX? Jump;
+		public static SFX? Hurt;
+		public static SFX? TilePlace;
+		public static SFX? TileBreak;
 		
-		public static SoundEffectInstance FallInstance;
+		public static SoundEffect? Fall;
+		public static SoundEffectInstance? FallInstance;
 
 		public static void LoadAssets()
 		{
-			TestSound = LoadSound("TestSound");
-			Step = LoadSound("Step");
-			MenuSelect = LoadSound("MenuSelect");
-			Blip = LoadSound("MenuBlip");
-			Jump = LoadSound("Jump");
-			Fall = LoadSound("Fall");
-			Hurt = LoadSound("Hurt");
-			TilePlace = LoadSound("BlockPlace");
-			TileBreak = LoadSound("BlockBreak");
+			TestSound = new("TestSound", 5);
+			Step = new("Step", 10);
+			MenuSelect = new("MenuSelect", 7);
+			Blip = new("MenuBlip", 10);
+			Jump = new("Jump", 3);
+			Hurt = new("Hurt", 3);
+			TilePlace = new("BlockPlace", 5);
+			TileBreak = new("BlockBreak", 5);
 
+			Fall = LoadSound("Fall");
 			FallInstance = Fall.CreateInstance();
 		}
 
 		public static void Dispose()
 		{
-			TestSound.Dispose();
-			Step.Dispose();
-			MenuSelect.Dispose();
-			Blip.Dispose();
-			Jump.Dispose();
-			Fall.Dispose();
-			Hurt.Dispose();
-			TilePlace.Dispose();
-			TileBreak.Dispose();
+			TestSound?.Dispose();
+			Step?.Dispose();
+			MenuSelect?.Dispose();
+			Blip?.Dispose();
+			Jump?.Dispose();
+			Fall?.Dispose();
+			Hurt?.Dispose();
+			TilePlace?.Dispose();
+			TileBreak?.Dispose();
 			
-			FallInstance.Dispose();
+			FallInstance?.Dispose();
 		}
 	}
 	
@@ -110,7 +110,7 @@ public static class Assets
 
 	public static void Unload()
 	{
-		Music.Dispose();
+		Music?.Dispose();
 		
 		Textures.Dispose();
 		Sounds.Dispose();

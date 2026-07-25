@@ -29,7 +29,7 @@ public static class Tiles
 			return;
 		
 		if (Grid[x, y] != type && !silent)
-			Assets.Sounds.TilePlace.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+			Assets.Sounds.TilePlace?.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 		
 		Grid[x, y] = type;
 	}
@@ -55,7 +55,7 @@ public static class Tiles
 		if (Grid[x, y] is > 0 and < 254)
 		{
 			if (!silent)
-				Assets.Sounds.TileBreak.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+				Assets.Sounds.TileBreak?.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 
 			SpawnParticle(pos, new Vector2(1, -1) * 5, 100, ParticleType.TileBreak);
 			SpawnParticle(pos, new Vector2(-1, 1) * 5, 100, ParticleType.TileBreak);

@@ -35,7 +35,7 @@ public partial class Player
 	    else if (Disappointment())
 	    {
 		    if (DisappointmentDelay < 0 && MediaPlayer.State == MediaState.Playing)
-			    Assets.Sounds.FallInstance.Play();
+			    Assets.Sounds.FallInstance?.Play();
 		    
 		    DisappointmentDelay = 100; 
 	    }
@@ -112,7 +112,7 @@ public partial class Player
 
 		Scale = new(1.2f, 0.8f);
 
-		Assets.Sounds.Hurt.Play();
+		Assets.Sounds.Hurt?.Play();
 
 		for (int i = 0; i < 10; i++)
 		{

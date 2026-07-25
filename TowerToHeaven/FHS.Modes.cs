@@ -6,8 +6,8 @@ public partial class FHS
 {
 	public static int ModeSwitchingTimer;
 	public static float ModeSwitchingProgress => ModeSwitchingTimer / (float)(Frozen ? TimeBeforeGameplay * 60 : TimeBeforePlacement * 60);
-	public static float TimeBeforePlacement = 10f;
-	public static float TimeBeforeGameplay = 7.5f;
+	public static float TimeBeforePlacement = 25f;
+	public static float TimeBeforeGameplay = 15f;
 	public static bool Frozen;
 
 	public static void UpdateModes()
@@ -18,7 +18,7 @@ public partial class FHS
 			Frozen = !Frozen;
 			ModeSwitchingTimer = 0;
 
-			Assets.Sounds.Blip.Play();
+			Assets.Sounds.Blip?.Play();
 		}
 	}
 }

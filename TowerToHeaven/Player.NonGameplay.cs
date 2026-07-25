@@ -26,7 +26,7 @@ public partial class Player
 
 		if (NewBestDelay > 0 && NewBestDelay % 10 == 0)
 		{
-			Assets.Sounds.Blip.Play(0.5f, (1f - NewBestDelay / 60f) * 0.1f + 0.2f, 0);
+			Assets.Sounds.Blip?.Play(0.5f, (1f - NewBestDelay / 60f) * 0.1f + 0.2f, 0);
 		}
 	}
     
@@ -34,7 +34,7 @@ public partial class Player
 	{
 		if (MediaPlayer.State == MediaState.Stopped && !Disappointment())
 		{
-			Assets.Sounds.FallInstance.Stop();
+			Assets.Sounds.FallInstance?.Stop();
 		    
 			MediaPlayer.Play(Assets.Music);
 		}
