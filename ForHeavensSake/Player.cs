@@ -22,8 +22,9 @@ public class Player
 	public int JumpLeewayTime;
 	public int JumpDelay;
 	public const float Speed = 5f;
+    public Vector2 Scale = new(1, 1);
 
-	public bool Grounded() => (CollidingWithTileFloor || Position.Y > FHS.GroundLevel * FHS.TileSize) && Velocity.Y > 0;
+    public bool Grounded() => (CollidingWithTileFloor || Position.Y > FHS.GroundLevel * FHS.TileSize) && Velocity.Y > 0;
 	
 	public void HandleInput()
 	{
@@ -32,8 +33,10 @@ public class Player
 		{
 			JumpDelay = 10;
 			Assets.Sounds.Jump.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
-			
-			JumpLeewayTime = 0;
+			Scale.X = 0.5f;
+			Scale.Y = 2f;
+
+            JumpLeewayTime = 0;
 			Velocity.Y = -Speed;
 		}
 
@@ -79,7 +82,10 @@ public class Player
 		CollidingWithTileX = false;
 		CollidingWithTileHead = false;
 		CollidingWithTileFloor = false;
-	}
+
+		Scale.X = MathHelper.Lerp(1, Scale.X, 0.9f);
+        Scale.Y = MathHelper.Lerp(1, Scale.Y, 0.9f);
+    }
 
 	public void UpdateCollision()
 	{
@@ -179,6 +185,6 @@ public class Player
 		
 		FHS.SpriteBatch.Draw(texture, new Vector2(600, 800) - FHS.ScreenPosition, null, new Color(116, 131, 250), 0, texture.Size / 2f, 2f, SpriteEffects.None, 0);
 		
-		FHS.SpriteBatch.Draw(texture, new Vector2(MathF.Floor(Position.X / 2) * 2, MathF.Floor(Position.Y / 2) * 2) - FHS.ScreenPosition, null, Color.White, 0, texture.Size / 2f, 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
+		FHS.SpriteBatch.Draw(texture, new Vector2(MathF.Floor(Position.X / 2) * 2, MathF.Floor(Position.Y / 2) * 2) - FHS.ScreenPosition, null, Color.White, 0, texture.Size / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
 	}
 }
