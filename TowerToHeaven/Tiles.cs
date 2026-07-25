@@ -25,6 +25,9 @@ public static class Tiles
 
 	public static void PlaceTile(int x, int y, byte type = 1, bool silent = false)
 	{
+		if (Grid[x, y] >= 254)
+			return;
+		
 		if (Grid[x, y] != type && !silent)
 			Assets.Sounds.TilePlace.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 		
