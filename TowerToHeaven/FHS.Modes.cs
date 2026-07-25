@@ -39,7 +39,7 @@ public partial class FHS
 			if (Input.MousePosition.Y < ScreenSize.Y * 0.1f || up)
 				ScreenPosition.Y -= 7;
 			
-			if (Input.MousePosition.Y > ScreenSize.Y * 0.9f || down)
+			if ((Input.MousePosition.Y > ScreenSize.Y * 0.9f || down) && ScreenPosition.Y + ScreenSize.Y < GroundLevel * TileSize)
 				ScreenPosition.Y += 7;
 		}
 	}

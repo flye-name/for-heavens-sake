@@ -10,27 +10,23 @@ public partial class Player
 
 	public void Jump()
 	{
-		var jump = Input.KeyboardCurrent.IsKeyDown(Keys.Space);
-		if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
+		for (int i = 0; i < 5; i++)
 		{
-			for (int i = 0; i < 5; i++)
-			{
-				var rand = new Random(FHS.AmbientTimer + i);
+			var rand = new Random(FHS.AmbientTimer + i);
 
-				var velX = rand.Next(-15, 15);
+			var velX = rand.Next(-15, 15);
 
-				var velY = rand.Next(-20, -5);
-				ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(velX, velY), 30, ParticleType.FootStep);
-			}
-			
-			JumpDelay = 10;
-			Assets.Sounds.Jump?.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
-			Scale.X = 0.5f;
-			Scale.Y = 2f;
-
-			JumpLeewayTime = 0;
-			Velocity.Y = -Speed;
+			var velY = rand.Next(-20, -5);
+			ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(velX, velY), 30, ParticleType.FootStep);
 		}
+		
+		JumpDelay = 10;
+		Assets.Sounds.Jump?.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+		Scale.X = 0.5f;
+		Scale.Y = 2f;
+
+		JumpLeewayTime = 0;
+		Velocity.Y = -Speed * (Sticky ? 0.5f : 1);
 	}
 	
 	public void HandleTiles()
@@ -49,13 +45,12 @@ public partial class Player
 			{
 				var y = (FHS.GroundLevel - j) * FHS.TileSize;
 				var shouldUpdate = (y < FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f && y > FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f) || (y < Position.Y + FHS.ScreenSize.Y * 1.5f && y > Position.Y - FHS.ScreenSize.Y * .5f);
-				if (Tiles.Grid[i, j] == 0 || !shouldUpdate)
+				if (Tiles.Grid[i, j] == 0 || !shouldUpdate || (MathF.Sin(i + j + FHS.AmbientTimer * 0.015f) < 0 && Tiles.Grid[i, j] == TileTypes.Phasing))
 					continue;
 
-
-				if (Tiles.Grid[i, j] is > 3 and <= 121)
+				if (Tiles.Grid[i, j] is > TileTypes.Breakable and <= 81)
 				{
-					if (Tiles.Grid[i, j]++ > 120)
+					if (Tiles.Grid[i, j]++ > 80)
 					{
 						Tiles.RemoveTile(i, j);
 					}
@@ -76,19 +71,25 @@ public partial class Player
 					collided = true;
 					shouldMoveX = true;
 				}
-				if (headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height < Position.Y && Tiles.Grid[i, j] < 254)
+				if (headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height < Position.Y && Tiles.Grid[i, j] < TileTypes.Wall)
 				{
 					CollidingWithTileHead = true;
 					collided = true;
 				}
-				if (FloorBounds.Intersects(hitbox) && hitbox.Y > Position.Y && Tiles.Grid[i, j] < 254)
+				if (FloorBounds.Intersects(hitbox) && hitbox.Y > Position.Y && Tiles.Grid[i, j] < TileTypes.Wall)
 				{
 					JumpLeewayTime = 15;
 					CollidingWithTileFloor = true;
 
-					if (Tiles.Grid[i, j] == 3)
+					if (Tiles.Grid[i, j] == TileTypes.Breakable)
 						Tiles.Grid[i, j]++;
-					
+
+					if (Tiles.Grid[i, j] == TileTypes.Sticky)
+						Sticky = true;
+
+					if (Tiles.Grid[i, j] == TileTypes.Bouncy)
+						Jump();
+
 					collided = true;
 					shouldMoveY = true;
 				}

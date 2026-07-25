@@ -52,7 +52,9 @@ public partial class Player
 	{
 		if (!FHS.Frozen)
 		{
-			Jump();
+			var jump = Input.KeyboardCurrent.IsKeyDown(Keys.Space);
+			if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
+				Jump();
 
 			var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
 			var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
@@ -62,9 +64,9 @@ public partial class Player
 				if (left && right)
 					Velocity.X = 0;
 				else if (left && !CollidingWithTileLeft)
-					Velocity.X = -Speed;
+					Velocity.X = -Speed * (Sticky ? 0.5f : 1);
 				else if (right && !CollidingWithTileRight)
-					Velocity.X = Speed;
+					Velocity.X = Speed * (Sticky ? 0.5f : 1);
 			}
 
 			if (left)
@@ -77,11 +79,14 @@ public partial class Player
 			if (Input.JustClickedL)
 			{
 				var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
-				var type = (byte)3;
+				var type = TileTypes.Breakable;
 				if (rand.Next(4) == 0)
-					type = 2;
+					type = new[] { TileTypes.Damaging, TileTypes.Bouncy, TileTypes.Phasing }[rand.Next(3)];
 				else if (rand.Next(3) == 0)
-					type = 1;
+					type = TileTypes.Normal;
+				else if (rand.Next(30) == 0)
+					type = TileTypes.Sticky;
+				
 				Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition, type);
 			}
 
@@ -92,11 +97,14 @@ public partial class Player
 		if (Input.JustPressed(Keys.P))
 		{
 			var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
-			var type = (byte)3;
+			var type = TileTypes.Breakable;
 			if (rand.Next(4) == 0)
-				type = 2;
+				type = new[] { TileTypes.Damaging, TileTypes.Bouncy, TileTypes.Phasing }[rand.Next(3)];
 			else if (rand.Next(3) == 0)
-				type = 1;
+				type = TileTypes.Normal;
+			else if (rand.Next(30) == 0)
+				type = TileTypes.Sticky;
+			
 			Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition, type);
 		}
 

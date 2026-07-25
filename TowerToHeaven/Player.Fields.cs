@@ -15,6 +15,7 @@ public partial class Player
 	public bool CollidingWithTileRight;
 	public bool CollidingWithTileHead;
 	public bool CollidingWithTileFloor;
+	public static bool Sticky;
 	public int JumpLeewayTime;
 	public int JumpDelay;
 	public int DamageDelay;
@@ -41,7 +42,7 @@ public partial class Player
     
 	public void ResetFields()
 	{
-
+		Sticky = false;
 		CollidingWithTileLeft = false;
 		CollidingWithTileRight = false;
 		CollidingWithTileHead = false;
