@@ -102,7 +102,8 @@ public static class Tiles
 		{
 			for (int j = 0; j < MaxTilesY; j++)
 			{
-				if (j * FHS.TileSize > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || j * FHS.TileSize < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
+				var y = (FHS.GroundLevel - j) * FHS.TileSize;
+				if (y > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || y < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
 					continue;
 				
 				switch (Grid[i, j])

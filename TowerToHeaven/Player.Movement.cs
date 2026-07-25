@@ -46,7 +46,8 @@ public partial class Player
 		{
 			for (int j = 0; j < Tiles.MaxTilesY; j++)
 			{
-				if (Tiles.Grid[i, j] == 0 || j * FHS.TileSize > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || j * FHS.TileSize < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
+				var y = (FHS.GroundLevel - j) * FHS.TileSize;
+				if (Tiles.Grid[i, j] == 0 || y > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || y < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
 					continue;
 
 
@@ -73,12 +74,12 @@ public partial class Player
 					collided = true;
 					shouldMoveX = true;
 				}
-				if (headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height < Position.Y)
+				if (headBounds.Intersects(hitbox) && hitbox.Y + hitbox.Height < Position.Y && Tiles.Grid[i, j] < 254)
 				{
 					CollidingWithTileHead = true;
 					collided = true;
 				}
-				if (FloorBounds.Intersects(hitbox) && hitbox.Y > Position.Y)
+				if (FloorBounds.Intersects(hitbox) && hitbox.Y > Position.Y && Tiles.Grid[i, j] < 254)
 				{
 					JumpLeewayTime = 15;
 					CollidingWithTileFloor = true;
