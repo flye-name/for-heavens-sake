@@ -7,7 +7,7 @@ namespace TowerToHeaven;
 
 public partial class Player
 {
-	public bool Disappointment() => Position.Y > LastGroundedHeight + FHS.TileSize * 7 || DamageDelay > 0 || DisappointmentDelay > 0; 
+	public bool Disappointment() => Position.Y > LastGroundedHeight + FHS.TileSize * 7 || DisappointmentDelay > 0; 
 	
 	public void HandleBestHeight()
 	{
