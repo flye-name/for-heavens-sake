@@ -59,7 +59,9 @@ public partial class FHS
 			Player.Draw();
 			Tiles.Draw();
             ParticleSystem.Draw();
+            HUD.Draw();
         }
+		
 
 		DrawCursor();
 		

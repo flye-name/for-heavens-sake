@@ -27,7 +27,8 @@ public class Player
 	public int BestHeight;
 	public int LastGroundedHeight;
 	public int DisappointmentDelay;
-	public bool PlayedDisappointmentSound;
+	public int NewBestDelay;
+	public bool PlayedNewBestBlip;
 	
 	public const float Speed = 5f;
     public Vector2 Scale = new(1, 1);
@@ -39,7 +40,7 @@ public class Player
 	
     public void Update()
     {
-	    BestHeight = Math.Max((int)Position.Y, BestHeight);
+	    HandleBestHeight();
 
 	    HandleMusic();
 	    
@@ -66,13 +67,31 @@ public class Player
 		    
 		    DisappointmentDelay = 100; 
 	    }
-
-	    Console.WriteLine(LastGroundedHeight);
-	    Console.WriteLine(Position.Y);
 	    
 	    ResetFields();
     }
 
+    public void HandleBestHeight()
+    {
+	    BestHeight = Math.Max(FHS.GroundLevel * FHS.TileSize - (int)Position.Y, BestHeight);
+
+	    if (BestHeight / FHS.TileSize % 100 == 0)
+	    {
+		    if (NewBestDelay <= 0 && !PlayedNewBestBlip)
+		    {
+			    NewBestDelay = 60;
+			    PlayedNewBestBlip = true;
+		    }
+	    }
+	    else 
+		    PlayedNewBestBlip = false;
+
+	    if (NewBestDelay > 0 && NewBestDelay % 10 == 0)
+	    {
+		    Assets.Sounds.Blip.Play(0.5f, (1f - NewBestDelay / 60f) * 0.1f + 0.2f, 0);
+	    }
+    }
+    
     public void HandleMusic()
     {
 	    if (MediaPlayer.State == MediaState.Stopped && !Disappointment())
@@ -92,6 +111,7 @@ public class Player
 	    JumpLeewayTime--;
 	    JumpDelay--;
 	    DamageDelay--;
+	    NewBestDelay--;
 
 	    if (Velocity.Y < 0 && JumpDelay < 3)
 		    JumpDelay = 3;
@@ -171,8 +191,8 @@ public class Player
 			Hurt(-1);
 		if (Input.KeyboardCurrent.IsKeyDown(Keys.T))
 		{
-			Position.Y -= 40;
-			FHS.ScreenPosition.Y -= 40;
+			Position.Y -= 100;
+			FHS.ScreenPosition.Y -= 100;
 		}
 		if (Input.KeyboardCurrent.IsKeyDown(Keys.R))
 		{
@@ -206,7 +226,7 @@ public class Player
 					continue;
 
 
-				if (Tiles.Grid[i, j] > 3)
+				if (Tiles.Grid[i, j] is > 3 and < 121)
 				{
 					if (Tiles.Grid[i, j]++ > 120)
 					{
