@@ -75,7 +75,7 @@ public class Player
     {
 	    BestHeight = Math.Max(FHS.GroundLevel * FHS.TileSize - (int)Position.Y, BestHeight);
 
-	    if (BestHeight / FHS.TileSize % 100 == 0)
+	    if (BestHeight / FHS.TileSize % 100 == 0 && BestHeight / FHS.TileSize > 0)
 	    {
 		    if (NewBestDelay <= 0 && !PlayedNewBestBlip)
 		    {
