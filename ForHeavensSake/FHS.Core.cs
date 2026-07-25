@@ -34,6 +34,8 @@ public partial class FHS : Game
 
 		Player.Position = new Vector2(ScreenSize.X / 2f, GroundLevel * TileSize);
 		Player.SpawnPosition = Player.Position;
+
+		Window.Title = "Tower to Heaven";
 		
 		Tiles.Init();
 			
