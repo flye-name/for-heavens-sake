@@ -46,7 +46,7 @@ public partial class Player
 		{
 			for (int j = 0; j < Tiles.MaxTilesY; j++)
 			{
-				if (Tiles.Grid[i, j] == 0)
+				if (Tiles.Grid[i, j] == 0 || j * FHS.TileSize > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || j * FHS.TileSize < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
 					continue;
 
 
