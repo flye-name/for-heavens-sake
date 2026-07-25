@@ -8,7 +8,11 @@ public static class HUD
 	public static void Draw()
 	{
 		SpriteFontBase font = FHS.FontSystem.GetFont(44);
-		string text = "HEIGHT: " + (FHS.GroundLevel * FHS.TileSize - (int)FHS.Player.Position.Y) / FHS.TileSize;
+		var text = "BEST HEIGHT: " + FHS.Player.BestHeight / FHS.TileSize;
+		var size = font.MeasureString(text);
+		FHS.SpriteBatch.Draw(Assets.Textures.Noise, new Rectangle(0, 0, (int)size.X + (int)(FHS.ScreenSize.X * 0.025f) + 16, (int)size.Y * 3), new Color(50, 50, 50));
+		
+		text = "HEIGHT: " + (FHS.GroundLevel * FHS.TileSize - (int)FHS.Player.Position.Y) / FHS.TileSize;
 		FHS.SpriteBatch.DrawString(font, text, FHS.ScreenSize * new Vector2(0.025f), Color.White, 0, font.MeasureString(text) / 2f * new Vector2(0, 1));
 		
 		Color color = FHS.Player.NewBestDelay > 0 && FHS.AmbientTimer % 10 < 5 ? Color.Transparent : Color.White;

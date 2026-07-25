@@ -226,7 +226,7 @@ public class Player
 					continue;
 
 
-				if (Tiles.Grid[i, j] is > 3 and < 121)
+				if (Tiles.Grid[i, j] is > 3 and <= 121)
 				{
 					if (Tiles.Grid[i, j]++ > 120)
 					{

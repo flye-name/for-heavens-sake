@@ -34,6 +34,8 @@ public partial class FHS : Game
 
 		Player.Position = new Vector2(ScreenSize.X / 2f, GroundLevel * TileSize);
 		Player.SpawnPosition = Player.Position;
+		
+		Tiles.Init();
 			
 		base.Initialize();
 	}
