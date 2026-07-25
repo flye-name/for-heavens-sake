@@ -4,6 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForHeavensSake;
 
+public enum ParticleType : byte
+{
+    TileBreak,
+    FootStep,
+    Hurt
+}
+
 public class ParticleSystem
 {
     public record struct Particle()
@@ -11,13 +18,15 @@ public class ParticleSystem
         public Vector2 Position;
         public Vector2 Velocity;
         public int TimeLeft;
+        public int Lifetime;
         public float Rotation;
+        public ParticleType Type;
     }
 
     public const int MaxParticles = 500;
     public static Particle[] Particles = new Particle[500];
 
-    public static int SpawnParticle(Vector2 position, Vector2 velocity, int lifetime)
+    public static int SpawnParticle(Vector2 position, Vector2 velocity, int lifetime, ParticleType type)
     {
         int index = 0;
 
@@ -30,7 +39,9 @@ public class ParticleSystem
         {
             Position = position,
             Velocity = velocity,
-            TimeLeft = lifetime
+            TimeLeft = lifetime,
+            Lifetime = lifetime,
+            Type = type
         };
 
         return index;
@@ -47,11 +58,30 @@ public class ParticleSystem
 
             particle.TimeLeft--;
             particle.Position += particle.Velocity;
-            particle.Velocity.Y += 0.5f;
 
-            if (particle.TimeLeft % 10 == 0)
+            switch (particle.Type)
             {
-                particle.Rotation += MathHelper.PiOver4;
+                case ParticleType.TileBreak:
+                    particle.Velocity.Y += 0.5f;
+    
+                    if (particle.TimeLeft % 10 == 0)
+                    {
+                        particle.Rotation += MathHelper.PiOver4;
+                    }
+                    break;
+                
+                case ParticleType.FootStep:
+                    particle.Velocity *= 0.97f;
+                    break;
+                
+                case ParticleType.Hurt:
+                    particle.Velocity.Y += 0.1f;
+
+                    if (particle.TimeLeft % 10 == 0)
+                    {
+                        particle.Rotation = particle.Velocity.Rotation;
+                    }
+                    break;
             }
         }
     }
@@ -67,7 +97,16 @@ public class ParticleSystem
             if (particle.TimeLeft <= 0)
                 continue;
 
-            FHS.SpriteBatch.Draw(texture, particle.Position - FHS.ScreenPosition, null, new Color(116, 131, 250), particle.Rotation, texture.Size / 2f, 1f, SpriteEffects.None, 0);
+            var progress = 1f - (particle.TimeLeft / (float)particle.Lifetime);
+            
+            (Vector2 scale, Color color) drawData = particle.Type switch
+            {
+                ParticleType.FootStep => (Vector2.One * 0.25f, Color.White),
+                ParticleType.Hurt => (new Vector2(1 - MathF.Floor(progress * 8) / 8f, MathF.Floor(progress * 8) / 8f), Color.Red),
+                _ => (Vector2.One, new Color(116, 131, 250))
+            };
+
+            FHS.SpriteBatch.Draw(texture, particle.Position - FHS.ScreenPosition, null, drawData.color, particle.Rotation, texture.Size / 2f, drawData.scale, SpriteEffects.None, 0);
         }
 	}
 }

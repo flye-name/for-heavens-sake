@@ -60,6 +60,16 @@ public class Player
 		var jump = Input.KeyboardCurrent.IsKeyDown(Keys.W) || Input.KeyboardCurrent.IsKeyDown(Keys.Up) || Input.KeyboardCurrent.IsKeyDown(Keys.Space);
 		if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
 		{
+			for (int i = 0; i < 5; i++)
+			{
+				var rand = new Random(FHS.AmbientTimer + i);
+
+				var velX = rand.Next(-15, 15);
+
+				var velY = rand.Next(-20, -5);
+				ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(velX, velY), 30, ParticleType.FootStep);
+			}
+			
 			JumpDelay = 10;
 			Assets.Sounds.Jump.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 			Scale.X = 0.5f;
@@ -92,6 +102,11 @@ public class Player
 		
 		if (Input.JustClickedR)
 			Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
+
+		if (Input.JustPressed(Keys.G))
+			Hurt(1);
+		if (Input.JustPressed(Keys.F))
+			Hurt(-1);
 
 		if (Input.JustClickedR && Input.KeyboardCurrent.IsKeyDown(Keys.LeftControl))
 		{
@@ -166,7 +181,7 @@ public class Player
 
 	public void UpdateMovement()
 	{
-		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > FHS.TileSize * 8.5f + 4;
+		var outerEdges = MathF.Abs(SpawnPosition.X - (Position.X + Velocity.X)) > FHS.ScreenSize.X / 2f - Size.X / 2f;
 		
 		var movement = new Vector2(outerEdges ? 0 : Velocity.X, MathHelper.Clamp(Velocity.Y, float.MinValue, Grounded() ? 0 : float.MaxValue));
 
@@ -184,10 +199,21 @@ public class Player
 
 		Position += movement;
 
-		if (Grounded() && MathF.Abs(movement.X) > 0 && FHS.AmbientTimer % 20 == 0)
-			Assets.Sounds.Step.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+		if (Grounded() && MathF.Abs(movement.X) > 0)
+		{
+			var rand = new Random(FHS.AmbientTimer);
+			
+			if (FHS.AmbientTimer % 20 == 0)
+				Assets.Sounds.Step.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+			if (FHS.AmbientTimer % 10 == 0)
+				ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(-Velocity.X, rand.Next(-4, -1)), 30, ParticleType.FootStep);
+		}
 
-		Velocity.X = 0;
+		if (MathF.Abs(Velocity.X) < 5f)
+			Velocity.X = 0;
+		else
+			Velocity.X = MathHelper.Lerp(Velocity.X, 0, 0.01f);
+		
 		Velocity.Y = MathHelper.Lerp(Velocity.Y, Speed * 1.5f, 0.005f);
 	}
 
@@ -201,6 +227,23 @@ public class Player
 		
 		FHS.ScreenPosition = Vector2.Clamp(FHS.ScreenPosition, new Vector2(float.MinValue), new Vector2(float.MaxValue, FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40));
 	}
+
+	public void Hurt(int direction)
+	{
+		Velocity.X = direction * 10;
+		Velocity.Y = 10;
+
+		Scale = new(1.2f, 0.8f);
+
+		Assets.Sounds.Hurt.Play();
+
+		for (int i = 0; i < 10; i++)
+		{
+			var rand = new Random(FHS.AmbientTimer + i);
+			var velocity = new Vector2(rand.Next(-100, 100), rand.Next(-100, 100)) * 0.1f;
+			ParticleSystem.SpawnParticle(Position, velocity, 60, ParticleType.Hurt);
+		}
+	}
 	
 	public void Draw()
 	{
@@ -208,9 +251,9 @@ public class Player
 
 		var quality = 8;
 		var position = new Vector2(MathF.Floor(Position.X / quality) * quality, MathF.Floor(Position.Y / quality) * quality);
+		var color = MathF.Abs(Velocity.X) > 8f && FHS.AmbientTimer % 3 == 0 ? Color.Red : Color.White;
 		
 		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, new Color(116, 131, 250), 0, texture.Size / 2f, Scale * 2.5f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
-		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, Color.White, 0, texture.Size / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
-
+		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, null, color, 0, texture.Size / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0);
 	}
 }
