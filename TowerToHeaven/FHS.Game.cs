@@ -16,11 +16,8 @@ public partial class FHS
 	
 	protected override void Update(GameTime gameTime)
 	{
-		ModeSwitchingTimer++;
 		
 		AmbientTimer++;
-
-		UpdateModes();
 		
 		Input.UpdateCurrent();
 
@@ -30,6 +27,8 @@ public partial class FHS
 		}
 		else
 		{
+			UpdateModes();
+			
 			Player.Update();
             ParticleSystem.Update();
         }

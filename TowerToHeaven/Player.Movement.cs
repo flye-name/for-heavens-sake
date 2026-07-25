@@ -47,7 +47,8 @@ public partial class Player
 			for (int j = 0; j < Tiles.MaxTilesY; j++)
 			{
 				var y = (FHS.GroundLevel - j) * FHS.TileSize;
-				if (Tiles.Grid[i, j] == 0 || y > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || y < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
+				var shouldUpdate = (y < FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f && y > FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f) || (y < Position.Y + FHS.ScreenSize.Y * 1.5f && y > Position.Y - FHS.ScreenSize.Y * .5f);
+				if (Tiles.Grid[i, j] == 0 || !shouldUpdate)
 					continue;
 
 
@@ -165,10 +166,15 @@ public partial class Player
 	public void UpdateCamera()
 	{
 		var visualPosition = Position - FHS.ScreenPosition;
-		if (visualPosition.Y > FHS.ScreenSize.Y * 0.75f && Velocity.Y > 0 && FHS.ScreenPosition.Y < FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40)
-			FHS.ScreenPosition.Y += Velocity.Y;
-		if (visualPosition.Y < FHS.ScreenSize.Y * 0.25f && Velocity.Y < 0)
-			FHS.ScreenPosition.Y += Velocity.Y;
+		if (new Rectangle((int)visualPosition.X, (int)visualPosition.Y, (int)Size.X, (int)Size.Y).Intersects(new Rectangle(0, 0, (int)FHS.ScreenSize.X, (int)FHS.ScreenSize.Y))) 
+		{	
+			if ((visualPosition.Y > FHS.ScreenSize.Y * 0.75f && Velocity.Y > 0 && FHS.ScreenPosition.Y < FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40) || (visualPosition.Y < FHS.ScreenSize.Y * 0.25f && Velocity.Y < 0))
+				FHS.ScreenPosition.Y += (MathF.Sign(Velocity.Y) < 0 ? -1 : 1) * MathHelper.Clamp(MathF.Abs(Velocity.Y), 1, float.MaxValue);
+		}
+		else
+		{
+			FHS.ScreenPosition.Y = MathHelper.Lerp(FHS.ScreenPosition.Y, Position.Y, 0.01f);
+		}
 		
 		FHS.ScreenPosition = Vector2.Clamp(FHS.ScreenPosition, new Vector2(float.MinValue), new Vector2(float.MaxValue, FHS.GroundLevel * FHS.TileSize - FHS.ScreenSize.Y + 40));
 	}

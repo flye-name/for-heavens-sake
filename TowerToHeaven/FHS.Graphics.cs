@@ -68,6 +68,9 @@ public partial class FHS
 		var rand = new Random(new Random(AmbientTimer).Next(int.MaxValue));
 		SpriteBatch.Draw(Assets.Textures.Noise, Vector2.Zero, new Rectangle(rand.Next((int)ScreenSize.X), rand.Next((int)ScreenSize.Y), (int)ScreenSize.X, (int)ScreenSize.Y), Color.White with { A = 0 } * 0.03f);
 		
+		if (Frozen)
+			SpriteBatch.Draw(Assets.Textures.Noise, Vector2.Zero, new Rectangle(0, 0, (int)ScreenSize.X, (int)ScreenSize.Y), Color.Black * 0.25f);
+		
 		SpriteBatch.End();
 	}
 
@@ -75,6 +78,9 @@ public partial class FHS
 	{
 		SpriteBatch.Draw(Assets.Textures.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 
+		if (!Frozen)
+			return;
+		
 		var pos = Input.MousePosition + ScreenPosition;
 		var y = (int)MathF.Floor(GroundLevel - pos.Y / TileSize) + 1;
 		var x = (int)(pos.X / TileSize);

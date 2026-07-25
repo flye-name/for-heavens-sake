@@ -12,27 +12,31 @@ public partial class Player
 {
 	public void Update()
     {
-	    HandleBestHeight();
-
 	    HandleMusic();
-	    
-	    HandleDelays();
-		
-	    HandleTiles();
-		
+
+	    if (!FHS.Frozen)
+	    {
+		    HandleBestHeight();
+		    HandleDelays();
+		    HandleTiles();
+	    }
+
 	    HandleInput();
 		
-	    for (int i = 0; i < 3; i++)
-	    {
-		    UpdateMovement();
-		    UpdateCamera();
+	    if (!FHS.Frozen)
+	    { 
+		    for (int i = 0; i < 3; i++)
+		    {
+			    UpdateMovement();
+			    UpdateCamera();
+		    }
 	    }
 	    
 	    if (Grounded())
 	    {
 		    LastGroundedHeight = (int)Position.Y;
 	    }
-	    else if (Disappointment())
+	    else if (Disappointment() && !FHS.Frozen)
 	    {
 		    if (DisappointmentDelay < 0 && MediaPlayer.State == MediaState.Playing)
 			    Assets.Sounds.FallInstance?.Play();
@@ -40,32 +44,52 @@ public partial class Player
 		    DisappointmentDelay = 100; 
 	    }
 	    
-	    ResetFields();
+	    if (!FHS.Frozen)
+			ResetFields();	
     }
     
 	public void HandleInput()
 	{
-		Jump();
-
-		var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
-		var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
-
-		if (Velocity.Y < 0.75f || Grounded())
+		if (!FHS.Frozen)
 		{
-			if (left && right)
-				Velocity.X = 0;
-			else if (left && !CollidingWithTileLeft)
-				Velocity.X = -Speed;
-			else if (right && !CollidingWithTileRight)
-				Velocity.X = Speed;
+			Jump();
+
+			var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
+			var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
+
+			if (Velocity.Y < 0.75f || Grounded())
+			{
+				if (left && right)
+					Velocity.X = 0;
+				else if (left && !CollidingWithTileLeft)
+					Velocity.X = -Speed;
+				else if (right && !CollidingWithTileRight)
+					Velocity.X = Speed;
+			}
+
+			if (left)
+				VisualDirection = -1;
+			else if (right)
+				VisualDirection = 1;
 		}
+		else
+		{
+			if (Input.JustClickedL)
+			{
+				var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
+				var type = (byte)3;
+				if (rand.Next(4) == 0)
+					type = 2;
+				else if (rand.Next(3) == 0)
+					type = 1;
+				Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition, type);
+			}
 
-		if (left)
-			VisualDirection = -1;
-		else if (right)
-			VisualDirection = 1;
-
-		if (Input.JustClickedL)
+			if (Input.JustClickedR)
+				Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
+		}
+		
+		if (Input.JustPressed(Keys.P))
 		{
 			var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
 			var type = (byte)3;
@@ -75,9 +99,6 @@ public partial class Player
 				type = 1;
 			Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition, type);
 		}
-
-		if (Input.JustClickedR)
-			Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
 
 		if (Input.JustPressed(Keys.G))
 			Hurt(1);
