@@ -115,8 +115,6 @@ public static class Assets
 		
 		FHS.FontSystem = new();
 		FHS.FontSystem.AddFont(File.ReadAllBytes(@"Content/Fonts/SpaceMono.ttf"));
-		
-		Saving.Save();
 	}
 
 	public static void Unload()
