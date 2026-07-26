@@ -76,7 +76,7 @@ public static class Tiles
 			if (!silent)
 				Assets.Sounds.TileBreak?.Play(1, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
 
-            ParticleSystem.SpawnParticle(pos, Vector2.Zero, 5, ParticleType.Strike);
+            SpawnParticle(pos, Vector2.Zero, 5, ParticleType.Strike);
             SpawnParticle(pos, new Vector2(1, -1) * 5, 100, ParticleType.TileBreak);
 			SpawnParticle(pos, new Vector2(-1, 1) * 5, 100, ParticleType.TileBreak);
 			SpawnParticle(pos, new Vector2(-1, -1) * 5, 100, ParticleType.TileBreak);
@@ -115,8 +115,9 @@ public static class Tiles
                     if (rand.Next(100) == 0)
                         PlaceTile(i, j, TileTypes.Normal, true);
 
-                    if (rand.Next(200) == 0)
-                        PlaceTile(i, j, TileTypes.Bomb, true);
+					// didn't get to this
+                    /*if (rand.Next(200) == 0)
+                        PlaceTile(i, j, TileTypes.Bomb, true);*/
                 }
 
 				if (j > 10)

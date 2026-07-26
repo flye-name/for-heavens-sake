@@ -5,6 +5,11 @@ using static TowerToHeaven.ProjectileManager;
 
 namespace TowerToHeaven;
 
+/// list of known issues:
+/// collision works horribly
+/// bombs spawn inside the walls
+/// projectiles dont hurt the player and i probably forgot to implement that if ur seeing this
+
 public enum ProjectileType : byte
 {
     FireballL,
