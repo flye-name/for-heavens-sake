@@ -36,10 +36,10 @@ public partial class FHS
 			var up = Input.KeyboardCurrent.IsKeyDown(Keys.W) || Input.KeyboardCurrent.IsKeyDown(Keys.Up);
 			var down = Input.KeyboardCurrent.IsKeyDown(Keys.S) || Input.KeyboardCurrent.IsKeyDown(Keys.Down);
 			
-			if (Input.MousePosition.Y < ScreenSize.Y * 0.1f || up)
+			if (up)
 				ScreenPosition.Y -= 7;
 			
-			if ((Input.MousePosition.Y > ScreenSize.Y * 0.9f || down) && ScreenPosition.Y + ScreenSize.Y < GroundLevel * TileSize)
+			if (down && ScreenPosition.Y + ScreenSize.Y < GroundLevel * TileSize)
 				ScreenPosition.Y += 7;
 		}
 	}
