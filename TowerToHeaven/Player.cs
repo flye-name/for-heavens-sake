@@ -19,7 +19,8 @@ public partial class Player
 		    HandleBestHeight();
 		    HandleDelays();
 		    HandleTiles();
-	    }
+            HandleAnimations();
+        }
 
 	    HandleInput();
 		

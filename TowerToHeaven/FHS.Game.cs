@@ -31,6 +31,8 @@ public partial class FHS
 			
 			Player.Update();
             ParticleSystem.Update();
+            ProjectileManager.Update();
+            Tiles.Update();
         }
 
 		if (Input.JustPressed(Keys.Escape))

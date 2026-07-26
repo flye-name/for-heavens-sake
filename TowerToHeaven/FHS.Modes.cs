@@ -11,7 +11,7 @@ public partial class FHS
 	public static float TimeBeforeGameplay = 10f;
 	public static bool Frozen;
 
-	public static void UpdateModes()
+    public static void UpdateModes()
 	{
 		ModeSwitchingTimer++;
 		var maxTime = (Frozen ? TimeBeforeGameplay * 60 : TimeBeforePlacement * 60);

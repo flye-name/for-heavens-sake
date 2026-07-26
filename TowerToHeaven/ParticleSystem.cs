@@ -8,6 +8,7 @@ public enum ParticleType : byte
 {
     TileBreak,
     FootStep,
+    Strike,
     Hurt
 }
 
@@ -99,14 +100,16 @@ public class ParticleSystem
 
             var progress = 1f - (particle.TimeLeft / (float)particle.Lifetime);
             
-            (Vector2 scale, Color color) drawData = particle.Type switch
+            (Vector2 scale, Color color, Texture2D? tex) drawData = particle.Type switch
             {
-                ParticleType.FootStep => (Vector2.One * 0.25f, Color.White),
-                ParticleType.Hurt => (new Vector2(1 - MathF.Floor(progress * 8) / 8f, MathF.Floor(progress * 8) / 8f), Color.Red),
-                _ => (Vector2.One, new Color(116, 131, 250))
+                ParticleType.FootStep => (Vector2.One, Color.White, Assets.Textures.Smoke),
+                ParticleType.Hurt => (new Vector2(1 - MathF.Floor(progress * 8) / 8f, MathF.Floor(progress * 8) / 8f) * 2, Color.Red, Assets.Textures.HitHurt),
+                ParticleType.Strike => (Vector2.One * 2, Color.White, Assets.Textures.Strike),
+                ParticleType.TileBreak => (Vector2.One * 2, Color.White, Assets.Textures.Brick),
+                _ => (Vector2.One, new Color(116, 131, 250), texture)
             };
 
-            FHS.SpriteBatch.Draw(texture, particle.Position - FHS.ScreenPosition, null, drawData.color, particle.Rotation, texture.Size / 2f, drawData.scale, SpriteEffects.None, 0);
+            FHS.SpriteBatch.Draw(drawData.tex, particle.Position - FHS.ScreenPosition, null, drawData.color, particle.Rotation, drawData.tex.Size / 2f, drawData.scale, SpriteEffects.None, 0);
         }
 	}
 }

@@ -59,6 +59,7 @@ public partial class FHS
 			Player.Draw();
 			Tiles.Draw();
             ParticleSystem.Draw();
+            ProjectileManager.Draw();
             HUD.Draw();
         }
 		
@@ -87,9 +88,6 @@ public partial class FHS
 		pos = new Vector2(x, GroundLevel - y) * TileSize - ScreenPosition;
 		var opacity = MathF.Abs(MathF.Sin(AmbientTimer * 0.05f)) * 0.5f + 0.5f;
 		
-		SpriteBatch.Draw(Assets.Textures.Placeholder, pos, null, Color.White * opacity, 0, Vector2.Zero, new Vector2(0.1f, 2), SpriteEffects.None, 0);
-		SpriteBatch.Draw(Assets.Textures.Placeholder, pos + new Vector2(Assets.Textures.Placeholder.Width * 2, 0), null, Color.White * opacity, 0, Vector2.Zero, new Vector2(0.1f, 2), SpriteEffects.None, 0);
-		SpriteBatch.Draw(Assets.Textures.Placeholder, pos, null, Color.White * opacity, 0, Vector2.Zero, new Vector2(2, 0.1f), SpriteEffects.None, 0);
-		SpriteBatch.Draw(Assets.Textures.Placeholder, pos + new Vector2(0, Assets.Textures.Placeholder.Height * 2), null, Color.White * opacity, 0, Vector2.Zero, new Vector2(2, 0.1f), SpriteEffects.None, 0);
+		SpriteBatch.Draw(Assets.Textures.Crosshair, pos, null, Color.White * opacity, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
 	}
 }

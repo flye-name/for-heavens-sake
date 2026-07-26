@@ -150,11 +150,22 @@ public partial class Player
 		if (Grounded() && MathF.Abs(movement.X) > 0)
 		{
 			var rand = new Random(FHS.AmbientTimer);
-			
-			if (FHS.AmbientTimer % 20 == 0)
-				Assets.Sounds.Step?.Play(0.2f, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+			frameDelay++;
+
+            if (frameDelay >= 10)
+			{
+				frameDelay = 0;
+				StepAnim = !StepAnim;
+            }
+
+            if (FHS.AmbientTimer % 20 == 0)
+			{
+                Assets.Sounds.Step?.Play(0.2f, new Random(FHS.AmbientTimer).Next(100) / 100f * -0.2f, 0);
+            }
 			if (FHS.AmbientTimer % 10 == 0)
-				ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(-Velocity.X, rand.Next(-4, -1)), 30, ParticleType.FootStep);
+			{
+                ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(-Velocity.X, rand.Next(-4, -1)), 30, ParticleType.FootStep);
+            }
 		}
 
 		if (MathF.Abs(Velocity.X) < 5f)

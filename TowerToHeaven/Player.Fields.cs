@@ -22,7 +22,10 @@ public partial class Player
 	public int BestHeight;
 	public int LastGroundedHeight;
 	public int DisappointmentDelay;
-	public int NewBestDelay;
+    public int frame;
+    public int frameDelay;
+    public bool StepAnim;
+    public int NewBestDelay;
 	public bool PlayedNewBestBlip;
 	
 	public const float Speed = 5f;
@@ -48,7 +51,7 @@ public partial class Player
 		CollidingWithTileHead = false;
 		CollidingWithTileFloor = false;
 
-		Scale.X = MathHelper.Lerp(1, Scale.X, 0.9f);
+        Scale.X = MathHelper.Lerp(1, Scale.X, 0.9f);
 		Scale.Y = MathHelper.Lerp(1, Scale.Y, 0.9f);
 	}
 }
