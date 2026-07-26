@@ -114,10 +114,6 @@ public static class Tiles
                 {
                     if (rand.Next(100) == 0)
                         PlaceTile(i, j, TileTypes.Normal, true);
-
-					// didn't get to this
-                    /*if (rand.Next(200) == 0)
-                        PlaceTile(i, j, TileTypes.Bomb, true);*/
                 }
 
 				if (j > 10)

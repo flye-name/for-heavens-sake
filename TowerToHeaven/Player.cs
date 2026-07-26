@@ -20,6 +20,7 @@ public partial class Player
 		    HandleDelays();
 		    HandleTiles();
             HandleAnimations();
+            ProjectileCollision();
         }
 
 	    HandleInput();
@@ -133,7 +134,21 @@ public partial class Player
 		}
 	}
 
-	public void Hurt(int direction)
+	public void ProjectileCollision()
+	{
+		for (int k = 0; k < ProjectileManager.MaxProjectiles; k++)
+		{
+			ref var p = ref ProjectileManager.Projectiles[k];
+
+			if ((p.Position - Position).Length() < 16)
+			{
+				Hurt(p.Velocity.X > 0 ? 1 : -1);
+			}
+		}
+	}
+
+
+    public void Hurt(int direction)
 	{
 		DamageDelay = 20;
 		

@@ -7,8 +7,7 @@ namespace TowerToHeaven;
 
 /// list of known issues:
 /// collision works(?) horribly
-/// bombs spawn inside the walls (also they should prolly spawn on the grid)
-/// projectiles dont hurt the player and i probably forgot to implement that if ur seeing this
+/// yay i got the list down to one thing!
 
 public enum ProjectileType : byte
 {
