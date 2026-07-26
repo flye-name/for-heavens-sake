@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     
     <PropertyGroup>
+        <Version>1.0.0</Version>
+        <Authors>flye.name</Authors>
+        <Company>flye.name</Company>
         <OutputType>Exe</OutputType>
         <PublishSingleFile>true</PublishSingleFile>
         <TargetFramework>net10.0</TargetFramework>
