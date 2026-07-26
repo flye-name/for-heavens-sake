@@ -140,9 +140,7 @@ public class ProjectileManager
 
     public static void Draw()
 	{
-		var fireballTex = Assets.Textures.Fireball;
-        var bombTex = Assets.Textures.Bomb;
-        var explosionTex = Assets.Textures.Placeholder;
+		var texture = Assets.Textures.Atlas;
 
         for (int k = 0; k < MaxProjectiles; k++)
         {
@@ -156,15 +154,15 @@ public class ProjectileManager
             switch (p.Type)
             {
                 case ProjectileType.FireballL:
-                    FHS.SpriteBatch.Draw(fireballTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, fireballTex.Size / 2f, 2, SpriteEffects.None, 0);
+                    FHS.SpriteBatch.Draw(texture, p.Position - FHS.ScreenPosition,  new Rectangle(54, 34, 32, 28), Color.White, 0, new Vector2(32, 28) / 2f, 2, SpriteEffects.None, 0);
                     break;
 
                 case ProjectileType.FireballR:
-                    FHS.SpriteBatch.Draw(fireballTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, fireballTex.Size / 2f, 2, SpriteEffects.FlipHorizontally, 0);
+                    FHS.SpriteBatch.Draw(texture, p.Position - FHS.ScreenPosition, new Rectangle(54, 34, 32, 28), Color.White, 0, new Vector2(32, 28) / 2f, 2, SpriteEffects.FlipHorizontally, 0);
                     break;
 
                 case ProjectileType.FallBomb:
-                    FHS.SpriteBatch.Draw(bombTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, bombTex.Size / 2f, 2, SpriteEffects.None, 0);
+                    FHS.SpriteBatch.Draw(texture, p.Position - FHS.ScreenPosition, new Rectangle(0, 34, 16, 28), Color.White, 0, new Vector2(16, 28) / 2f, 2, SpriteEffects.None, 0);
                     break;
             }
         }

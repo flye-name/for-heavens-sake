@@ -89,7 +89,7 @@ public class ParticleSystem
 	
 	public static void Draw()
 	{
-		var texture = Assets.Textures.Placeholder;
+		var texture = Assets.Textures.Atlas;
 
         for (int k = 0; k < MaxParticles; k++)
         {
@@ -100,16 +100,16 @@ public class ParticleSystem
 
             var progress = 1f - (particle.TimeLeft / (float)particle.Lifetime);
             
-            (Vector2 scale, Color color, Texture2D? tex) drawData = particle.Type switch
+            (Vector2 scale, Color color, Rectangle frame) drawData = particle.Type switch
             {
-                ParticleType.FootStep => (Vector2.One, Color.White, Assets.Textures.Smoke),
-                ParticleType.Hurt => (new Vector2(1 - MathF.Floor(progress * 8) / 8f, MathF.Floor(progress * 8) / 8f) * 2, Color.Red, Assets.Textures.HitHurt),
-                ParticleType.Strike => (Vector2.One * 2, Color.White, Assets.Textures.Strike),
-                ParticleType.TileBreak => (Vector2.One * 2, Color.White, Assets.Textures.Brick),
-                _ => (Vector2.One, new Color(116, 131, 250), texture)
+                ParticleType.FootStep => (Vector2.One, Color.White, new Rectangle(122, 34, 16, 16)),
+                ParticleType.Hurt => (new Vector2(1 - MathF.Floor(progress * 8) / 8f, MathF.Floor(progress * 8) / 8f) * 2, Color.Red, new Rectangle(18, 34, 16, 14)),
+                ParticleType.Strike => (Vector2.One * 2, Color.White, new Rectangle(140, 34, 32, 32)),
+                ParticleType.TileBreak => (Vector2.One * 2, Color.White, new Rectangle(36, 34, 16, 16)),
+                _ => (Vector2.One, new Color(116, 131, 250), new Rectangle(306, 0, 32, 32))
             };
 
-            FHS.SpriteBatch.Draw(drawData.tex, particle.Position - FHS.ScreenPosition, null, drawData.color, particle.Rotation, drawData.tex.Size / 2f, drawData.scale, SpriteEffects.None, 0);
+            FHS.SpriteBatch.Draw(texture, particle.Position - FHS.ScreenPosition, drawData.frame, drawData.color, particle.Rotation, new Vector2(drawData.frame.Width, drawData.frame.Height) / 2f, drawData.scale, SpriteEffects.None, 0);
         }
 	}
 }

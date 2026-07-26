@@ -18,71 +18,20 @@ public static class Assets
 
 	public static class Textures
 	{
-		public static Texture2D? Placeholder;
+		public static Texture2D? Atlas;
 		public static Texture2D? Noise;
-        public static Texture2D? Brick;
-        public static Texture2D? BrickBlock;
-        public static Texture2D? Crosshair;
-        public static Texture2D? Ice;
-        public static Texture2D? Smoke;
-        public static Texture2D? Cannon;
-        public static Texture2D? Fireball;
-        public static Texture2D? Strike;
-        public static Texture2D? Bomb;
-        public static Texture2D? HitHurt;
-        public static Texture2D? WallA;
-        public static Texture2D? WallB;
-        public static Texture2D? Player;
-        public static Texture2D? Mirror;
-        public static Texture2D? StickyBlock;
-        public static Texture2D? Balloon;
-        public static Texture2D? Spinner;
 
         public static void LoadAssets()
 		{
-			Placeholder = LoadTexture("Placeholder");
+			Atlas = LoadTexture("Atlas");
 			Noise = LoadTexture("Noise");
-            Brick = LoadTexture("Brick");
-            BrickBlock = LoadTexture("BrickBlock");
-            Crosshair = LoadTexture("Crosshair");
-			Ice = LoadTexture("Ice");
-            Smoke = LoadTexture("Smoke");
-            Cannon = LoadTexture("Cannon");
-            Fireball = LoadTexture("Fireball");
-            Strike = LoadTexture("Strike");
-            Bomb = LoadTexture("Bomb");
-            HitHurt = LoadTexture("Blood");
-            WallA = LoadTexture("WallA");
-            WallB = LoadTexture("WallB");
-            Player = LoadTexture("Player");
-            Mirror = LoadTexture("Mirror");
-            StickyBlock = LoadTexture("StickyBlock");
-            Balloon = LoadTexture("Balloon");
-            Spinner = LoadTexture("Crystal");
         }
 
 		public static void Dispose()
 		{
-			Placeholder?.Dispose();
+			Atlas?.Dispose();
 			Noise?.Dispose();
-            Brick?.Dispose();
-            BrickBlock?.Dispose();
-            Crosshair?.Dispose();
-            Ice?.Dispose();
-            Smoke?.Dispose();
-            Cannon?.Dispose();
-            Fireball?.Dispose();
-            Strike?.Dispose();
-            Bomb?.Dispose();
-            HitHurt?.Dispose();
-            WallA?.Dispose();
-            WallB?.Dispose();
-            Player?.Dispose();
-            Mirror?.Dispose();
-            StickyBlock?.Dispose();
-            Balloon?.Dispose();
-            Spinner?.Dispose();
-        }
+		}
     }
 
     public static class Effects

@@ -77,7 +77,8 @@ public partial class FHS
 
 	public static void DrawCursor()
 	{
-		SpriteBatch.Draw(Assets.Textures.Placeholder, Input.MousePosition, null, Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
+		var texture = Assets.Textures.Atlas;
+		SpriteBatch.Draw(texture, Input.MousePosition, new Rectangle(306, 0, 32, 32), Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 
 		if (!Frozen)
 			return;
@@ -88,6 +89,6 @@ public partial class FHS
 		pos = new Vector2(x, GroundLevel - y) * TileSize - ScreenPosition;
 		var opacity = MathF.Abs(MathF.Sin(AmbientTimer * 0.05f)) * 0.5f + 0.5f;
 		
-		SpriteBatch.Draw(Assets.Textures.Crosshair, pos, null, Color.White * opacity, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+		SpriteBatch.Draw(texture, pos, new Rectangle(88, 34, 32, 32), Color.White * opacity, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 	}
 }

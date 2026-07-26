@@ -178,64 +178,74 @@ public static class Tiles
 
     public static void Draw()
 	{
+		var texture = Assets.Textures.Atlas;
 		for (int i = 0; i < MaxTilesX; i++)
 		{
 			for (int j = 0; j < MaxTilesY; j++)
 			{
 				var y = (FHS.GroundLevel - j) * FHS.TileSize;
-				if (y > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || y < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f)
+				if (y > FHS.ScreenPosition.Y + FHS.ScreenSize.Y * 1.5f || y < FHS.ScreenPosition.Y - FHS.ScreenSize.Y * .5f || Grid[i, j] == TileTypes.Inactive)
 					continue;
+
+				var rectangle = new Rectangle(0, 0, 32, 32);
 				
 				switch (Grid[i, j])
 				{
-					case TileTypes.Inactive:
-						break;
-					
 					case TileTypes.Normal:
-						FHS.SpriteBatch.Draw(Assets.Textures.BrickBlock, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Damaging: 
-						FHS.SpriteBatch.Draw(Assets.Textures.Spinner, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Phasing:
-						FHS.SpriteBatch.Draw(Assets.Textures.Mirror, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White * MathF.Sin(i + j + FHS.AmbientTimer * 0.015f), 0, Vector2.Zero, 2, SpriteEffects.None, 0);
-                        FHS.SpriteBatch.Draw(Assets.Textures.Mirror, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White * 0.1f, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34 * 2, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White * MathF.Sin(i + j + FHS.AmbientTimer * 0.015f), 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+                        FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White * 0.1f, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
                         break;
 					
 					case TileTypes.Bouncy:
-						FHS.SpriteBatch.Draw(Assets.Textures.Balloon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34 * 3, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Sticky:
-						FHS.SpriteBatch.Draw(Assets.Textures.StickyBlock, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34 * 4, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 
                     case TileTypes.CannonL:
-                        FHS.SpriteBatch.Draw(Assets.Textures.Cannon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34 * 6, 0);
+                        FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
                         break;
 
                     case TileTypes.CannonR:
-                        FHS.SpriteBatch.Draw(Assets.Textures.Cannon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.FlipHorizontally, 0);
+						rectangle.Offset(34 * 6, 0);
+                        FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.FlipHorizontally, 0);
                         break;
 
                     case TileTypes.Bomb:
-                        FHS.SpriteBatch.Draw(Assets.Textures.Bomb, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle = new Rectangle(0, 34, 16, 28);
+                        FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
                         break;
 
                     case TileTypes.Wall:
-						FHS.SpriteBatch.Draw(Assets.Textures.WallB, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34 * 7, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Wall2:
-						FHS.SpriteBatch.Draw(Assets.Textures.WallA, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						rectangle.Offset(34 * 8, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					default:
+						rectangle.Offset(34 * 5, 0);
 						var rand = new Random(i * j + FHS.AmbientTimer);
 						var offset = new Vector2(rand.Next(-15, 15), rand.Next(-15, 15)) * (Grid[i, j] / 80f);
-						FHS.SpriteBatch.Draw(Assets.Textures.Ice, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize + offset - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(texture, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize + offset - FHS.ScreenPosition, rectangle, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 				}
 			}

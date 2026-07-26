@@ -86,15 +86,15 @@ public partial class Player
 
 	public void Draw()
 	{
-		var texture = Assets.Textures.Player;
+		var texture = Assets.Textures.Atlas;
 
 		var quality = 8;
 		var position = new Vector2(MathF.Floor(Position.X / quality) * quality, MathF.Floor(Position.Y / quality) * quality);
 		var color = DamageDelay > 0 && FHS.AmbientTimer % 3 == 0 ? Color.Red : Color.White;
 
-		int frameX = (texture.Width / 4) * frame;
+		int frameX = 34 * frame;
 
-		Rectangle sourceRect = new(frameX, 0, texture.Width / 4, texture.Height);
+		Rectangle sourceRect = new(174 + frameX, 34, 32, 32);
 		
 		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, sourceRect, color, 0, new Vector2(sourceRect.Width, sourceRect.Height) / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 	}
