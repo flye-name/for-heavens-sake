@@ -8,11 +8,13 @@
         <Nullable>enable</Nullable>
         <RootNamespace>TowerToHeaven</RootNamespace>
         <OutputName>Tower to Heaven</OutputName>
+        <ApplicationIcon>TowerToHeaven.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
         <Content Include="Content/**" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="TowerToHeaven.bmp" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="TowerToHeaven.ico" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="fnalibs/**" CopyToOutputDirectory="PreserveNewest" />
         
         <ProjectReference Include="../FNA/FNA.Core.csproj">
