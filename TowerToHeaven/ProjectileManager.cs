@@ -72,32 +72,45 @@ public class ProjectileManager
                 switch (p.Type)
                 {
                     case ProjectileType.FireballL:
-
+                    {
                         if (TileCollide(p.Position))
                         {
                             p.TimeLeft -= 200;
                             ParticleSystem.SpawnParticle(p.Position, Vector2.Zero, 5, ParticleType.Strike);
                         }
+
+                        var hitbox = new Rectangle((int)p.Position.X + 4, (int)p.Position.Y + 4, 26, 26);
+
+                        if (hitbox.Intersects(FHS.Player.Bounds))
+                            FHS.Player.Hurt(p.Velocity.X > 0 ? 1 : -1);
                         break;
+                    }
 
                     case ProjectileType.FireballR:
-
+                    {
                         if (TileCollide(p.Position))
                         {
                             p.TimeLeft -= 200;
                             ParticleSystem.SpawnParticle(p.Position, Vector2.Zero, 5, ParticleType.Strike);
                         }
+
+                        var hitbox = new Rectangle((int)p.Position.X + 4, (int)p.Position.Y + 4, 26, 26);
+
+                        if (hitbox.Intersects(FHS.Player.Bounds))
+                            FHS.Player.Hurt(p.Velocity.X > 0 ? 1 : -1);
                         break;
-
+                    }
                     case ProjectileType.FallBomb:
-
+                    {
                         p.Velocity.Y += 0.1f;
                         if (TileCollide(p.Position, true))
                         {
                             p.TimeLeft -= 200;
                             ParticleSystem.SpawnParticle(p.Position, Vector2.Zero, 5, ParticleType.Strike);
                         }
+
                         break;
+                    }
                 }
             }
         }

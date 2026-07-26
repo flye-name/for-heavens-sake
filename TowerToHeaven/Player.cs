@@ -21,7 +21,6 @@ public partial class Player
 		    HandleDelays();
 		    HandleTiles();
 		    HandleAnimations();
-		    ProjectileCollision();
 	    }
 	    else
 	    {
@@ -64,27 +63,30 @@ public partial class Player
 		
 		if (!FHS.Frozen)
 		{
-			var jump = Input.KeyboardCurrent.IsKeyDown(Keys.Space);
-			if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
-				Jump();
-
-			var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
-			var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
-
-			if (Velocity.Y < 0.75f || Grounded())
+			if (DamageDelay < 0)
 			{
-				if (left && right)
-					Velocity.X = 0;
-				else if (left && !CollidingWithTileLeft)
-					Velocity.X = -Speed * (Sticky ? 0.5f : 1);
-				else if (right && !CollidingWithTileRight)
-					Velocity.X = Speed * (Sticky ? 0.5f : 1);
-			}
+				var jump = Input.KeyboardCurrent.IsKeyDown(Keys.Space);
+				if (jump && (Grounded() || JumpLeewayTime > 0) && !CollidingWithTileHead && JumpDelay < 0)
+					Jump();
 
-			if (left)
-				VisualDirection = -1;
-			else if (right)
-				VisualDirection = 1;
+				var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
+				var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
+
+				if (Velocity.Y < 0.75f || Grounded())
+				{
+					if (left && right)
+						Velocity.X = 0;
+					else if (left && !CollidingWithTileLeft)
+						Velocity.X = -Speed * (Sticky ? 0.5f : 1);
+					else if (right && !CollidingWithTileRight)
+						Velocity.X = Speed * (Sticky ? 0.5f : 1);
+				}
+
+				if (left)
+					VisualDirection = -1;
+				else if (right)
+					VisualDirection = 1;
+			}
 		}
 		else
 		{
@@ -105,7 +107,7 @@ public partial class Player
 			if (Input.JustClickedR)
 				Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
 		}
-		/*
+		
 		if (Input.JustPressed(Keys.P))
 		{
 			var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
@@ -141,20 +143,6 @@ public partial class Player
 		if (Input.JustClickedR && Input.KeyboardCurrent.IsKeyDown(Keys.LeftControl))
 		{
 			Tiles.RemoveAllTiles();
-		}
-		*/
-	}
-
-	public void ProjectileCollision()
-	{
-		for (int k = 0; k < ProjectileManager.MaxProjectiles; k++)
-		{
-			ref var p = ref ProjectileManager.Projectiles[k];
-
-			if ((p.Position - Position).Length() < 16)
-			{
-				Hurt(p.Velocity.X > 0 ? 1 : -1);
-			}
 		}
 	}
 
