@@ -122,8 +122,20 @@ public static class Tiles
                         PlaceTile(i, j, TileTypes.Normal, true);
                 }
 
-				if (j > 10)
+				if (j is > 10 and < MaxTilesY - 10 && (i == 4 || i == MaxTilesX - 5))
 				{
+					var canPlace = true;
+					for (int k = -3; k < 4; k++)
+					{
+						if (Grid[i, j + k] is TileTypes.CannonL or TileTypes.CannonR)
+							canPlace = false;
+					}
+					if ((i == 4 && Grid[MaxTilesX - 5, j] is TileTypes.CannonL or TileTypes.CannonR) || (i == MaxTilesX - 5 && Grid[4, j] is TileTypes.CannonL or TileTypes.CannonR))
+						canPlace = false;
+					
+					if (!canPlace)
+						continue;
+					
                     if (i == 4 && rand.Next(10) == 0)
                         PlaceTile(i, j, TileTypes.CannonL, true);
 
