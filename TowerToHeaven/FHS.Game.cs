@@ -10,6 +10,7 @@ public partial class FHS
 {
 	public static bool InGame;
 	public static int DelayBeforeMovement;
+	public static float FadeIn;
 	public static bool CanMove => DelayBeforeMovement > 30;
 	public static Player Player = new();
 	public const int GroundLevel = 40;
@@ -18,18 +19,23 @@ public partial class FHS
 	
 	protected override void Update(GameTime gameTime)
 	{
+		Assets.Sounds.CRT?.Play(0.5f, 0, 0);
+		Assets.Sounds.CRT?.Instances[0].Volume = FadeIn * 0.5f;
 		
 		AmbientTimer++;
+
+		FadeIn = MathF.Min(FadeIn + 0.01f, 1f);
 		
 		Input.UpdateCurrent();
 
 		if (!InGame)
 		{
+			MainMenu.UpdateSplash();
 			MainMenu.HandleInput();
 		}
 		else
 		{
-			if (DelayBeforeMovement < 31)
+			if (!CanMove)
 				DelayBeforeMovement++;
 			
 			UpdateModes();

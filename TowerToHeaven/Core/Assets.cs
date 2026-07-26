@@ -59,7 +59,9 @@ public static class Assets
 		public static SFX? Hurt;
 		public static SFX? TilePlace;
 		public static SFX? TileBreak;
-        public static SFX? FireballSpit;
+		public static SFX? FireballSpit;
+		public static SFX? Cartridge;
+		public static SFX? CRT;
 
         public static SoundEffect? Fall;
 		public static SoundEffectInstance? FallInstance;
@@ -74,7 +76,11 @@ public static class Assets
 			Hurt = new("Hurt", 3);
 			TilePlace = new("BlockPlace", 5);
 			TileBreak = new("BlockBreak", 5);
-            FireballSpit = new("FireballSpit", 1);
+			FireballSpit = new("FireballSpit", 1);
+			Cartridge = new("Cartridge", 1);
+			CRT = new("CRT", 1);
+			CRT.Instances[0].IsLooped = true;
+			
 
             Fall = LoadSound("Fall");
 			FallInstance = Fall.CreateInstance();
@@ -92,6 +98,8 @@ public static class Assets
 			TilePlace?.Dispose();
 			TileBreak?.Dispose();
             FireballSpit?.Dispose();
+            Cartridge?.Dispose();
+            CRT?.Dispose();
 
             FallInstance?.Dispose();
 		}

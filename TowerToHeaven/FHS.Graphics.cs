@@ -19,7 +19,7 @@ public partial class FHS
 	protected override void Draw(GameTime gameTime)
 	{
 		GraphicsDevice.SetRenderTarget(MainRender);
-		GraphicsDevice.Clear(Color.CornflowerBlue * 0.05f);
+		GraphicsDevice.Clear(Color.CornflowerBlue * 0.05f * FadeIn);
 		Capture();
 		
 		GraphicsDevice.SetRenderTarget(PixelRender);
@@ -77,6 +77,9 @@ public partial class FHS
 
 	public static void DrawCursor()
 	{
+		if (!InGame)
+			return;
+		
 		var texture = Assets.Textures.Atlas;
 		SpriteBatch.Draw(texture, Input.MousePosition, new Rectangle(306, 0, 32, 32), Color.White, 0, Vector2.Zero, .2f, SpriteEffects.None, 0);
 
