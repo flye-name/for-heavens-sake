@@ -2,6 +2,7 @@ using System.ComponentModel.Design;
 using TowerToHeaven.Core;
 using TowerToHeaven.Core.UI;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -19,9 +20,15 @@ public partial class Player
 		    HandleBestHeight();
 		    HandleDelays();
 		    HandleTiles();
-            HandleAnimations();
-            ProjectileCollision();
-        }
+		    HandleAnimations();
+		    ProjectileCollision();
+	    }
+	    else
+	    {
+		    if (Assets.Sounds.FallInstance?.State == SoundState.Playing)
+				Assets.Sounds.FallInstance?.Stop();
+		    DisappointmentDelay = -1;
+	    }
 
 	    HandleInput();
 		
