@@ -56,7 +56,7 @@ public class ProjectileManager
         {
             var rand = new Random(FHS.AmbientTimer);
 
-            if (rand.Next(200) == 0)
+            if (rand.Next(250) == 0)
                 SpawnProjectile(new Vector2(rand.Next(4, Tiles.MaxTilesX - 4) * FHS.TileSize + FHS.TileSize * 0.5f, FHS.ScreenPosition.Y), Vector2.Zero, 200, ProjectileType.FallBomb);
 
             for (int k = 0; k < MaxProjectiles; k++)
