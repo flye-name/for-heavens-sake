@@ -95,6 +95,27 @@ public partial class Player
 		int frameX = 34 * frame;
 
 		Rectangle sourceRect = new(174 + frameX, 34, 32, 32);
+
+		var x = (int)position.X / FHS.TileSize;
+		var y = FHS.GroundLevel - (int)position.Y / FHS.TileSize - 1;
+
+		if (x - 1 > 0 && y > 0 && x + 1 < Tiles.MaxTilesX && y < Tiles.MaxTilesY)
+		{
+			for (int i = -1; i < 2; i++)
+			{
+				var tileUnderneath = Tiles.Grid[x + i, y];
+				if (tileUnderneath != TileTypes.Inactive)
+				{
+					for (int k = 0; k < 8; k++)
+					{
+						var playerFeet = new Rectangle((int)position.X, (int)position.Y + Bounds.Height / 2, Bounds.Width, 2);
+						var tileHitbox = new Rectangle(x * FHS.TileSize, (FHS.GroundLevel - y) * FHS.TileSize, FHS.TileSize, FHS.TileSize);
+						if (!playerFeet.Intersects(tileHitbox))
+							position.Y++;
+					}
+				}
+			}
+		}
 		
 		FHS.SpriteBatch.Draw(texture, position - FHS.ScreenPosition, sourceRect, color, 0, new Vector2(sourceRect.Width, sourceRect.Height) / 2f, Scale * 2f, VisualDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 	}
