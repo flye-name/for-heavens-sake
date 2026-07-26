@@ -84,11 +84,11 @@ public partial class Player
 			if (Input.JustClickedL)
 			{
 				var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
-				var type = TileTypes.Breakable;
+				var type = TileTypes.Normal;
 				if (rand.Next(4) == 0)
 					type = new[] { TileTypes.Damaging, TileTypes.Bouncy, TileTypes.Phasing }[rand.Next(3)];
 				else if (rand.Next(3) == 0)
-					type = TileTypes.Normal;
+					type = TileTypes.Breakable;
 				else if (rand.Next(30) == 0)
 					type = TileTypes.Sticky;
 				
@@ -98,7 +98,7 @@ public partial class Player
 			if (Input.JustClickedR)
 				Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
 		}
-		
+		/*
 		if (Input.JustPressed(Keys.P))
 		{
 			var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
@@ -135,6 +135,7 @@ public partial class Player
 		{
 			Tiles.RemoveAllTiles();
 		}
+		*/
 	}
 
 	public void ProjectileCollision()
