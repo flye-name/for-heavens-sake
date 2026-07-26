@@ -33,7 +33,7 @@ public partial class Player
     
 	public void HandleMusic()
 	{
-		if (MediaPlayer.State == MediaState.Stopped && !Disappointment())
+		if (MediaPlayer.State == MediaState.Stopped && !Disappointment() && BestHeight / FHS.TileSize >= 4)
 		{
 			Assets.Sounds.FallInstance?.Stop();
 		    
