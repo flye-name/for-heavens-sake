@@ -107,43 +107,6 @@ public partial class Player
 			if (Input.JustClickedR)
 				Tiles.RemoveTile(Input.MousePosition + FHS.ScreenPosition);
 		}
-		
-		if (Input.JustPressed(Keys.P))
-		{
-			var rand = new Random((int)(Position.X + Position.Y) + FHS.AmbientTimer);
-			var type = TileTypes.Breakable;
-			if (rand.Next(4) == 0)
-				type = new[] { TileTypes.Damaging, TileTypes.Bouncy, TileTypes.Phasing }[rand.Next(3)];
-			else if (rand.Next(3) == 0)
-				type = TileTypes.Normal;
-			else if (rand.Next(30) == 0)
-				type = TileTypes.Sticky;
-			
-			Tiles.PlaceTile(Input.MousePosition + FHS.ScreenPosition, type);
-		}
-
-		if (Input.JustPressed(Keys.G))
-			Hurt(1);
-		if (Input.JustPressed(Keys.F))
-			Hurt(-1);
-		if (Input.KeyboardCurrent.IsKeyDown(Keys.T))
-		{
-			Position.Y -= 100;
-			FHS.ScreenPosition.Y -= 100;
-		}
-		if (Input.KeyboardCurrent.IsKeyDown(Keys.R))
-		{
-			Position.X += 10;
-		}
-		if (Input.KeyboardCurrent.IsKeyDown(Keys.E))
-		{
-			Position.X -= 10;
-		}
-
-		if (Input.JustClickedR && Input.KeyboardCurrent.IsKeyDown(Keys.LeftControl))
-		{
-			Tiles.RemoveAllTiles();
-		}
 	}
 
 

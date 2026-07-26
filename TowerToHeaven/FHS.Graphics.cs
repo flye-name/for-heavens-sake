@@ -89,9 +89,15 @@ public partial class FHS
 		var pos = Input.MousePosition + ScreenPosition;
 		var y = (int)MathF.Floor(GroundLevel - pos.Y / TileSize) + 1;
 		var x = (int)(pos.X / TileSize);
-		pos = new Vector2(x, GroundLevel - y) * TileSize - ScreenPosition;
+		pos = new Vector2(x, GroundLevel - y) * TileSize;
 		var opacity = MathF.Abs(MathF.Sin(AmbientTimer * 0.05f)) * 0.5f + 0.5f;
 		
-		SpriteBatch.Draw(texture, pos, new Rectangle(88, 34, 32, 32), Color.White * opacity, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+		var hitbox = FHS.Player.Bounds;
+		hitbox.Inflate(-4, -4);
+		var tileHitbox = new Rectangle(x * TileSize, (GroundLevel - y) * TileSize,  TileSize, TileSize);
+		if (hitbox.Intersects(tileHitbox))
+			return; 
+		
+		SpriteBatch.Draw(texture, pos - ScreenPosition, new Rectangle(88, 34, 32, 32), Color.White * opacity, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 	}
 }

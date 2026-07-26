@@ -39,6 +39,12 @@ public static class Tiles
 		if (x < 0 || y < 0 || x > MaxTilesX || y > MaxTilesY)
 			return;
 		
+		var hitbox = FHS.Player.Bounds;
+		hitbox.Inflate(-4, -4);
+		var tileHitbox = new Rectangle(x * FHS.TileSize, (FHS.GroundLevel - y) * FHS.TileSize,  FHS.TileSize, FHS.TileSize);
+		if (hitbox.Intersects(tileHitbox))
+			return; 
+		
 		PlaceTile(x, y, type, silent);
 	}
 
