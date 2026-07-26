@@ -11,6 +11,7 @@ public partial class FHS
 	public static bool InGame;
 	public static int DelayBeforeMovement;
 	public static float FadeIn;
+	public static int EscapeCounter;
 	public static bool CanMove => DelayBeforeMovement > 30;
 	public static Player Player = new();
 	public const int GroundLevel = 40;
@@ -46,10 +47,12 @@ public partial class FHS
             Tiles.Update();
         }
 
-		if (Input.JustPressed(Keys.Escape))
+		if (Input.KeyboardCurrent.IsKeyDown(Keys.Escape) && InGame)
 		{
-			Instance.Exit();
+			if (EscapeCounter++ > 60)
+				Instance.Exit();
 		}
+		else EscapeCounter = 0;
 
 		Input.UpdatePrevious();
 		
