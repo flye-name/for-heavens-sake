@@ -10,13 +10,13 @@ public partial class Player
 
 	public void Jump()
 	{
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			var rand = new Random(FHS.AmbientTimer + i);
 
-			var velX = rand.Next(-15, 15);
+			var velX = rand.Next(-10, 10);
 
-			var velY = rand.Next(-20, -5);
+			var velY = rand.Next(-10, -2);
 			ParticleSystem.SpawnParticle(Position + new Vector2(Size.X * 0.5f, Size.Y * 0.7f), new Vector2(velX, velY), 30, ParticleType.FootStep);
 		}
 		
