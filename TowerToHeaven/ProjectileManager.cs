@@ -6,16 +6,15 @@ using static TowerToHeaven.ProjectileManager;
 namespace TowerToHeaven;
 
 /// list of known issues:
-/// collision works horribly
-/// bombs spawn inside the walls
+/// collision works(?) horribly
+/// bombs spawn inside the walls (also they should prolly spawn on the grid)
 /// projectiles dont hurt the player and i probably forgot to implement that if ur seeing this
 
 public enum ProjectileType : byte
 {
     FireballL,
     FireballR,
-    FallBomb,
-    Explosion
+    FallBomb
 }
 
 public class ProjectileManager
@@ -59,9 +58,7 @@ public class ProjectileManager
             var rand = new Random(FHS.AmbientTimer);
 
             if (rand.Next(100) == 0)
-            {
-                SpawnProjectile(FHS.ScreenPosition + new Vector2((int)(rand.NextDouble() * FHS.ScreenSize.X), 0), Vector2.Zero, 200, ProjectileType.FallBomb);
-            }
+                SpawnProjectile(new Vector2(rand.Next(4, Tiles.MaxTilesX - 4) * FHS.TileSize + FHS.TileSize * 0.5f, FHS.ScreenPosition.Y), Vector2.Zero, 200, ProjectileType.FallBomb);
 
             for (int k = 0; k < MaxProjectiles; k++)
             {
@@ -81,7 +78,6 @@ public class ProjectileManager
                         {
                             p.TimeLeft -= 200;
                             ParticleSystem.SpawnParticle(p.Position, Vector2.Zero, 5, ParticleType.Strike);
-                            continue;
                         }
                         break;
 
@@ -91,29 +87,24 @@ public class ProjectileManager
                         {
                             p.TimeLeft -= 200;
                             ParticleSystem.SpawnParticle(p.Position, Vector2.Zero, 5, ParticleType.Strike);
-                            continue;
                         }
                         break;
 
                     case ProjectileType.FallBomb:
 
                         p.Velocity.Y += 0.1f;
-                        if (TileCollide(p.Position))
+                        if (TileCollide(p.Position, true))
                         {
                             p.TimeLeft -= 200;
                             ParticleSystem.SpawnParticle(p.Position, Vector2.Zero, 5, ParticleType.Strike);
-                            continue;
                         }
-                        break;
-
-                    case ProjectileType.Explosion:
                         break;
                 }
             }
         }
     }
 
-    public static bool TileCollide(Vector2 position)
+    public static bool TileCollide(Vector2 position, bool bomb = false)
     {
         int x = (int)(position.X / FHS.TileSize);
         int y = FHS.GroundLevel - (int)(position.Y / FHS.TileSize);
@@ -123,10 +114,27 @@ public class ProjectileManager
 
         var tile = Tiles.Grid[x, y];
 
-        Tiles.RemoveTile(x, y);
-
         if (tile == 0 || tile == TileTypes.CannonL || tile == TileTypes.CannonR)
             return false;
+
+        Tiles.RemoveTile(x, y);
+
+        if (bomb)
+        {
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    int nx = x + i;
+                    int ny = y + j;
+
+                    if (nx < 0 || nx >= Tiles.MaxTilesX || ny < 0 || ny >= Tiles.MaxTilesY)
+                        continue;
+
+                    Tiles.RemoveTile(nx, ny);
+                }
+            }
+        }
 
         return true;
     }
@@ -149,19 +157,15 @@ public class ProjectileManager
             switch (p.Type)
             {
                 case ProjectileType.FireballL:
-                    FHS.SpriteBatch.Draw(fireballTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, fireballTex.Size / 2f, 4, SpriteEffects.None, 0);
+                    FHS.SpriteBatch.Draw(fireballTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, fireballTex.Size / 2f, 2, SpriteEffects.None, 0);
                     break;
 
                 case ProjectileType.FireballR:
-                    FHS.SpriteBatch.Draw(fireballTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, fireballTex.Size / 2f, 4, SpriteEffects.FlipHorizontally, 0);
+                    FHS.SpriteBatch.Draw(fireballTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, fireballTex.Size / 2f, 2, SpriteEffects.FlipHorizontally, 0);
                     break;
 
                 case ProjectileType.FallBomb:
-                    FHS.SpriteBatch.Draw(bombTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, bombTex.Size / 2f, 4, SpriteEffects.None, 0);
-                    break;
-
-                case ProjectileType.Explosion:
-                    FHS.SpriteBatch.Draw(explosionTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, explosionTex.Size / 2f, 4, SpriteEffects.None, 0);
+                    FHS.SpriteBatch.Draw(bombTex, p.Position - FHS.ScreenPosition, null, Color.White, 0, bombTex.Size / 2f, 2, SpriteEffects.None, 0);
                     break;
             }
         }

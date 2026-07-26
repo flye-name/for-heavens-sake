@@ -33,6 +33,10 @@ public static class Assets
         public static Texture2D? WallA;
         public static Texture2D? WallB;
         public static Texture2D? Player;
+        public static Texture2D? Mirror;
+        public static Texture2D? StickyBlock;
+        public static Texture2D? Balloon;
+        public static Texture2D? Spinner;
 
         public static void LoadAssets()
 		{
@@ -51,6 +55,10 @@ public static class Assets
             WallA = LoadTexture("WallA");
             WallB = LoadTexture("WallB");
             Player = LoadTexture("Player");
+            Mirror = LoadTexture("Mirror");
+            StickyBlock = LoadTexture("StickyBlock");
+            Balloon = LoadTexture("Balloon");
+            Spinner = LoadTexture("Crystal");
         }
 
 		public static void Dispose()
@@ -70,6 +78,10 @@ public static class Assets
             WallA?.Dispose();
             WallB?.Dispose();
             Player?.Dispose();
+            Mirror?.Dispose();
+            StickyBlock?.Dispose();
+            Balloon?.Dispose();
+            Spinner?.Dispose();
         }
     }
 

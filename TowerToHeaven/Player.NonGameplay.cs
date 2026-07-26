@@ -1,7 +1,8 @@
-using TowerToHeaven.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using TowerToHeaven.Core;
 
 namespace TowerToHeaven;
 
@@ -51,11 +52,21 @@ public partial class Player
         }
 		else if (Grounded())
         {
-            if (StepAnim)
+            var left = Input.KeyboardCurrent.IsKeyDown(Keys.A) || Input.KeyboardCurrent.IsKeyDown(Keys.Left);
+            var right = Input.KeyboardCurrent.IsKeyDown(Keys.D) || Input.KeyboardCurrent.IsKeyDown(Keys.Right);
+
+            if (left || right)
             {
-                frame = 1;
+                if (StepAnim)
+                {
+                    frame = 1;
+                }
+                else
+                {
+                    frame = 0;
+                }
             }
-            else
+			else
             {
                 frame = 0;
             }

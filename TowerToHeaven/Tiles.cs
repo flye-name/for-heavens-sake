@@ -196,50 +196,50 @@ public static class Tiles
 						break;
 					
 					case TileTypes.Normal:
-						FHS.SpriteBatch.Draw(Assets.Textures.BrickBlock, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.BrickBlock, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Damaging: 
-						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
-						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero,  new Vector2(2.1f, 0.2f), SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.Spinner, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Phasing:
-						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Gray * MathF.Sin(i + j + FHS.AmbientTimer * 0.015f), 0, Vector2.Zero, 2, SpriteEffects.None, 0);
-						break;
+						FHS.SpriteBatch.Draw(Assets.Textures.Mirror, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White * MathF.Sin(i + j + FHS.AmbientTimer * 0.015f), 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+                        FHS.SpriteBatch.Draw(Assets.Textures.Mirror, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White * 0.1f, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+                        break;
 					
 					case TileTypes.Bouncy:
-						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Purple, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.Balloon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Sticky:
-						FHS.SpriteBatch.Draw(Assets.Textures.Placeholder, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Olive, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.StickyBlock, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 
                     case TileTypes.CannonL:
-                        FHS.SpriteBatch.Draw(Assets.Textures.Cannon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+                        FHS.SpriteBatch.Draw(Assets.Textures.Cannon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
                         break;
 
                     case TileTypes.CannonR:
-                        FHS.SpriteBatch.Draw(Assets.Textures.Cannon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 4, SpriteEffects.FlipHorizontally, 0);
+                        FHS.SpriteBatch.Draw(Assets.Textures.Cannon, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.FlipHorizontally, 0);
                         break;
 
                     case TileTypes.Bomb:
-                        FHS.SpriteBatch.Draw(Assets.Textures.Bomb, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Red, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+                        FHS.SpriteBatch.Draw(Assets.Textures.Bomb, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.Red, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
                         break;
 
                     case TileTypes.Wall:
-						FHS.SpriteBatch.Draw(Assets.Textures.WallB, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.WallB, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					case TileTypes.Wall2:
-						FHS.SpriteBatch.Draw(Assets.Textures.WallA, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.WallA, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 					
 					default:
 						var rand = new Random(i * j + FHS.AmbientTimer);
 						var offset = new Vector2(rand.Next(-15, 15), rand.Next(-15, 15)) * (Grid[i, j] / 80f);
-						FHS.SpriteBatch.Draw(Assets.Textures.Ice, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize + offset - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 4, SpriteEffects.None, 0);
+						FHS.SpriteBatch.Draw(Assets.Textures.Ice, new Vector2(i, FHS.GroundLevel - j) * FHS.TileSize + offset - FHS.ScreenPosition, null, Color.White, 0, Vector2.Zero, 2, SpriteEffects.None, 0);
 						break;
 				}
 			}
