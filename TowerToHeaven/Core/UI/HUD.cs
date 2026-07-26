@@ -20,5 +20,14 @@ public static class HUD
 		Color color = FHS.Player.NewBestDelay > 0 && FHS.AmbientTimer % 10 < 5 ? Color.Transparent : Color.White;
 		text = "BEST HEIGHT: " + FHS.Player.BestHeight / FHS.TileSize;
 		FHS.SpriteBatch.DrawString(font, text, FHS.ScreenSize * new Vector2(0, 0.025f) + new Vector2(250, font.MeasureString(text).Y), color, 0, font.MeasureString(text) / 2f * new Vector2(0, 1));
+
+		if (FHS.Frozen)
+		{
+			text = "V";
+			FHS.SpriteBatch.DrawString(font, text, FHS.ScreenSize * new Vector2(0.5f, 0.2f - ((FHS.AmbientTimer * 0.025f) % 1f) * 0.025f), Color.White,  MathF.PI, font.MeasureString(text) / 2f);
+			
+			if (FHS.ScreenPosition.Y + FHS.ScreenSize.Y < FHS.GroundLevel * FHS.TileSize)
+				FHS.SpriteBatch.DrawString(font, text, FHS.ScreenSize * new Vector2(0.5f, 0.9f + ((FHS.AmbientTimer * 0.025f) % 1f) * 0.025f), Color.White,  0, font.MeasureString(text) / 2f);
+		}
 	}
 }
