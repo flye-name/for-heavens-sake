@@ -9,7 +9,9 @@ public static class MainMenu
 	public static void HandleInput()
 	{
 		if (Input.KeyboardCurrent.GetPressedKeys().Length > 0)
+		{
 			FHS.InGame = true;
+		}
 	}
 	
 	public static void Draw()

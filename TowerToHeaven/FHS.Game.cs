@@ -9,6 +9,8 @@ namespace TowerToHeaven;
 public partial class FHS
 {
 	public static bool InGame;
+	public static int DelayBeforeMovement;
+	public static bool CanMove => DelayBeforeMovement > 30;
 	public static Player Player = new();
 	public const int GroundLevel = 40;
 	public const int TileSize = 64;
@@ -27,6 +29,9 @@ public partial class FHS
 		}
 		else
 		{
+			if (DelayBeforeMovement < 31)
+				DelayBeforeMovement++;
+			
 			UpdateModes();
 			
 			Player.Update();

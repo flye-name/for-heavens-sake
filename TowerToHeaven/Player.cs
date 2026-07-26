@@ -52,6 +52,9 @@ public partial class Player
     
 	public void HandleInput()
 	{
+		if (!FHS.CanMove)
+			return;
+		
 		if (!FHS.Frozen)
 		{
 			var jump = Input.KeyboardCurrent.IsKeyDown(Keys.Space);
