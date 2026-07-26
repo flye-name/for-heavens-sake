@@ -2,6 +2,7 @@
     
     <PropertyGroup>
         <OutputType>Exe</OutputType>
+        <PublishSingleFile>true</PublishSingleFile>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -11,9 +12,13 @@
 
     <ItemGroup>
         <Content Include="Content/**" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="TowerToHeaven.bmp" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="fnalibs/**" CopyToOutputDirectory="PreserveNewest" />
         
-        <ProjectReference Include="../FNA/FNA.Core.csproj" />
+        <ProjectReference Include="../FNA/FNA.Core.csproj">
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </ProjectReference>
+        
         <ProjectReference Include="../FontStashSharp/src/XNA/FontStashSharp.FNA.Core.csproj" />
     </ItemGroup>
 
